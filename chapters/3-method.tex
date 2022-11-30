@@ -1,0 +1,55 @@
+\chapter{Method}
+
+\begin{comment}
+Beskriv pipeline for å generere NeRFs
+
+- Capture (video, image, polycam, etc.)
+- Process (COLMAP, or direct extraction from e.g. Polycam)
+    - Configuration of COLMAP
+- Train (Different models)
+    - Configuration of model
+- Render (Real-time rendering vs. slow rendering)
+- Evaluate (PSNR, SSIM, LPIPS)
+- Export
+
+- Pipelines created
+    - Pipeline to test 
+\end{comment}
+
+\section{Nerfstudio}
+With the magnitude of different published methods regarding NeRF, some with corresponding source code and some not, it's not trivial to compare them on self-captured data. In the experiments I have leveraged an open-source project named Nerfstudio. It is an API which streamlines the creation, training and visualization of NeRFs. The components that make up NeRFs are modularized in a way that allows interpretable implementation of different NeRF-methods. In addition, it ships with implemented versions of some of the most important published methods to date for real world captures; NeRF, mip-NeRF and instant-NGP.
+
+\section{Nerfacto}
+Nerfstudio also provides their own method dubbed "Nerfacto". The method isn't published work, but leverages  techniques from several other published methods which has proved to work well for real data captures. The techniques used in Nerfacto result in a method which balances modules focused on quality with modules focused on speed.
+
+%The techniques have already been covered in \autoref{chap:relatedwork}.
+
+Camera pose refinement is a technique proposed for NeRFs on forward facing scenes in \cite{wang_nerf--_2022}. It has later been built upon to support imperfect camera poses for full 3D scene representations in \cite{lin_barf_2021} and large, unbounded scenes in \cite{tancik_block-nerf_2022}. Pose refinement in NeRF is done by treating the camera poses and intrinsics as learnable parameters and jointly optimizing them with the 3D scene representation. I.e. optimizing both the photometric error and the corresponding camera poses. Pose refinement is a very effective measure to reduce cloudy artifacts and increase the sharpness and overall quality of the resulting 3D representation.
+
+Per image appearance conditioning is a technique proposed for NeRFs in \cite{martin-brualla_nerf_2021} and later used in multiple implementations, including \cite{tancik_block-nerf_2022}. The appearance embedding is a vector in a low-dimensional space which is optimized jointly with the NeRF in order to allow the NeRF to process and represent 3D scenes with variable lighting, exposures, weather and post-processing effects.
+
+Proposal sampling is a sampling technique discussed in \autoref{sec:mipnerf360}. Nerfacto extends the proposal sampler used in mip-NeRF 360 by utilizing two density functions implemented as small fused-mlp with hash encodings \cite{muller_instant_2022}. This provides an accurate and fast density-estimations.
+
+Scene contraction is yet another technique proposed in \cite{barronMipNeRF360Unbounded2022} and discussed in \autoref{sec:mipnerf360}.
+
+
+
+
+Nerfacto highlights the following techniques in their combined method.
+\begin{itemize}
+    \item \textbf{Camera pose refinement}:
+    \item \textbf{Per image appearance conditioning}:
+    \item \textbf{Proposal sampling}:
+    \item \textbf{Scene contraction}:
+    \item \textbf{Hash encoding}:
+\end{itemize}
+
+- Camera pose refinement: Block-NeRF, BARF, NeRF-
+- Per image appearance conditioning: NeRF-W
+- Proposal sampling: mip-NeRF 360
+- Scene contraction: mip-NeRF 360
+- Hash encoding: instant-ngp
+
+
+
+\section{Pipelines for testing}

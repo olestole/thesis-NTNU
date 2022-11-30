@@ -1,0 +1,120 @@
+\chapter{Results}
+
+\begin{comment}
+
+Experiments:
+- Explore the impact of capturing
+    - Capturing NeRFs in different ways
+        - Walking, standing still, sparsely, densely, linearly, around an object
+    - Capturing video, images, polycam
+        - Better/worse quality with polycam or COLMAP
+    - Capturing different kind of scenes
+        - Bounded/Unbounded
+    - Capturing in different conditions
+    - Capturing 
+    
+- Explore the impact of dataset size
+    - Extract different amounts of images from the video
+        - Simulate driving by walking up and back a street multiple times
+    - How much data is required until COLMAP becomes a bottleneck
+
+- Explore the impact of area-size
+    - Remember to point out that area is poorly defined since scale is perspective relative, depending on the level of detail you want.
+    - Area must be defined for a certain scene type. E.g. street view, aerial view, unbounded in multiple directions, bounded in all directions
+
+- Explore the impact of different methods
+    - instant-npg, nerfacto, NeRF
+
+Metrics
+- Quantitative
+    - PSNR, LPIPS, SSIM
+- Qualitative
+    - Compare images side-by-side
+
+
+
+Research questions:
+- To what extent does a good capture impact the result of a NeRF
+- How much data is required until COLMAP becomes a bottleneck?
+- What is the capacity of a NeRF when optimizing a street view scene?
+
+SCENES:
+- Bounded scene
+- Unbounded scene
+- Walking
+- Standing still
+- Street-view
+
+\end{comment}
+
+
+
+\section{Dataset}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1.0\textwidth]{figures/ohma_electra.png}
+    \caption{The dataset of Ohma Electra is ~47 seconds long, captured at 30 FPS resulting in 1416 total frames}
+    \label{fig:ohma_electra}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1.0\textwidth]{figures/tier.png}
+    \caption{The dataset of an electric scooter is ~15 seconds long, captured at 30 FPS resulting in 446 total frames}
+    \label{fig:tier}
+\end{figure}
+
+\section{Dataset size}
+
+We explore the impact of sampling different number of images from a video. The input video of Ohma Electra \cite{data:object-unbounded-ohma} is 47 seconds long, captured at 30 FPS resulting in 1410 total frames. Leveraging FFMPEG we sample frames at 4 increasingly dense levels.
+
+\begin{table}[h]
+\begin{tabular}{ccccccc}
+\hline
+\# Samples & PSNR $\uparrow$ & SSIM $\uparrow$ & LPIPS $\downarrow$ & Process Time & Training Time & Evaluate Time \\ \hline
+5\%                       & 17.955    & 0.458     & 0.338    & 02:37    & 29:03    & 00:19    \\
+10\%                      & 19.422    & 0.505     & 0.280    & 06:10    & 28:31    & 00:24    \\
+15\%                      & 19.841    & 0.537     & 0.268    & 12:50    & 28:39    & 00:32    \\
+20\%                      & 20.341    & 0.555     & 0.269    & 18:17    & 28:24    & 00:35    \\
+25\%                      & 20.118    & 0.548     & 0.263    & 30:05    & 49:08    & 01:15    \\
+40\%                      & 22.371    & 0.649     & 0.258    & 58:01    & 28:50    & 01:13    \\
+50\%                      & 21.738    & 0.623     & 0.263    & -    & -    & -    \\
+75\%                      & -    & -     & -    & -    & -    & -    \\
+\multicolumn{1}{l}{100\%} & -    & -     & -    & -    & -    & -    \\ \hline
+\end{tabular}
+\caption{An overview of how dataset size impacts render-quality and process-, training- and evaluation-time. Trained on \autoref{fig:ohma_electra} with a vanilla Nerfacto pipeline}
+\end{table}
+
+Increasing the dataset size increases the amount of time required to retrieve the camera poses, given they're not known a priori. As discussed in \autoref{sec:colmap}, COLMAP has several different feature matching algorithms, e.g. exhaustive, sequential, and vocabulary tree matching. The choice of a matching algorithm should depend on the type of capture, e.g. if the source of the sampled images is a video it entails that subsequent frames have a certain overlap and makes sequential matching a sensible choice. The time complexity of COLMAP and its matching algorithms is important as the dataset size increases, as it might consume a lot of the time in the overall process-train-render pipeline. An overview of the selected matching algorithms' complexities can be seen in \autoref{tab:colmap-complexity}.
+
+\section{Area size}
+
+We explore the impact of area size. Area in itself is poorly defined in the context of NeRF, since scale is perspective relative, depending on the level of detail you want. A single NeRF can efficiently represent a 3D model of the entire world, but the level of detail won't be satisfactory as you try to render detailed images. In this experiment we'll use a self-captured scene as the benchmark for area-related experiments. The scene \cite{data:streetview} is captured on a relatively straight street, bounded by houses on each side. 
+
+\begin{table}[h]
+\begin{tabular}{ccccc}
+\hline
+Metric & 50m & 100m & 200m & 400m \\ \hline
+PSNR   & -   & -    & -    & -    \\
+LPIPS  & -   & -    & -    & -    \\
+SSIM   & -   & -    & -    & -    \\ \hline
+\end{tabular}
+\end{table}
+
+\section{Different methods}
+
+There are multiple different methods proposed for reconstructing 3D scenes and rendering novel views.
+
+\subsection{NeRF}
+
+\subsection{Instant NeRF}
+
+\subsection{Nerfacto}
+
+% From Discord thread
+\textbf{Wavy artifacts in Nerfacto:}
+AFAIK those wavy artifacts are from how the nerfacto model does ray sampling. Sometimes for very thin objects, none of the samples across a ray will land on it, causing it not to be visible in the rendering 
+
+\textbf{Better results with another model?}
+One of the reasons nerfacto is so fast is because it learns the distribution of weight across a ray, then samples from that distribution to get the ray samples. This means you aren't sampling where you don't need to, but also you might miss thin structures. Other methods might use more simple ray samplers that would densely sample across the ray, but would end up being a good bit slower to train/render

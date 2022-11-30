@@ -1,3 +1,17 @@
+@Misc{figure:mipnerffrustum,
+  author =   {Barron, Jonathan T. and Mildenhall, Ben and Tancik, Matthew and Hedman, Peter and Martin-Brualla, Ricardo and Srinivasan, Pratul P.},
+  title =    {Mip-{NeRF}: {A} {Multiscale} {Representation} for {Anti}-{Aliasing} {Neural} {Radiance} {Fields}},
+  howpublished = {Reproduced as Figure~1 in \cite{barron_mip-nerf_2021}},
+  year =     {2021}}
+
+@misc{wiki:Volume_ray_casting,
+   author = "Wikipedia",
+   title = "{Volume ray casting} --- {W}ikipedia{,} The Free Encyclopedia",
+   year = "2022",
+   howpublished = {\url{http://en.wikipedia.org/w/index.php?title=Volume\%20ray\%20casting&oldid=1119695339}},
+   note = "[Online; accessed 28-November-2022]"
+ }
+ 
 @article{claerbout1991scrutiny,
   title={A Scrutiny of the Introduction},
   author={Claerbout, Jon F},
@@ -9,12 +23,197 @@
   publisher={Society of Exploration Geophysicists}
 }
 
-@article{landes1951scrutiny,
-  title={A Scrutiny of the Abstract},
-  author={Landes, Kenneth K},
-  journal={Bulletin of the American Association of Petroleum Geologists},
-  volume={35},
-  number={7},
-  pages={1660},
-  year={1951}
+@inproceedings{schoenberger2016sfm,
+    author={Sch\"{o}nberger, Johannes Lutz and Frahm, Jan-Michael},
+    title={Structure-from-Motion Revisited},
+    booktitle={Conference on Computer Vision and Pattern Recognition (CVPR)},
+    year={2016},
 }
+
+@inproceedings{schoenberger2016mvs,
+    author={Sch\"{o}nberger, Johannes Lutz and Zheng, Enliang and Pollefeys, Marc and Frahm, Jan-Michael},
+    title={Pixelwise View Selection for Unstructured Multi-View Stereo},
+    booktitle={European Conference on Computer Vision (ECCV)},
+    year={2016},
+}
+
+@Article{Lowe2004,
+author={Lowe, David G.},
+title={Distinctive Image Features from Scale-Invariant Keypoints},
+journal={International Journal of Computer Vision},
+year={2004},
+month={Nov},
+day={01},
+volume={60},
+number={2},
+pages={91-110},
+abstract={This paper presents a method for extracting distinctive invariant features from images that can be used to perform reliable matching between different views of an object or scene. The features are invariant to image scale and rotation, and are shown to provide robust matching across a substantial range of affine distortion, change in 3D viewpoint, addition of noise, and change in illumination. The features are highly distinctive, in the sense that a single feature can be correctly matched with high probability against a large database of features from many images. This paper also describes an approach to using these features for object recognition. The recognition proceeds by matching individual features to a database of features from known objects using a fast nearest-neighbor algorithm, followed by a Hough transform to identify clusters belonging to a single object, and finally performing verification through least-squares solution for consistent pose parameters. This approach to recognition can robustly identify objects among clutter and occlusion while achieving near real-time performance.},
+issn={1573-1405},
+doi={10.1023/B:VISI.0000029664.99615.94},
+url={https://doi.org/10.1023/B:VISI.0000029664.99615.94}
+}
+
+@misc{mildenhallNeRFRepresentingScenes2020,
+	title = {{NeRF}: {Representing} {Scenes} as {Neural} {Radiance} {Fields} for {View} {Synthesis}},
+	shorttitle = {{NeRF}},
+	url = {http://arxiv.org/abs/2003.08934},
+	abstract = {We present a method that achieves state-of-the-art results for synthesizing novel views of complex scenes by optimizing an underlying continuous volumetric scene function using a sparse set of input views. Our algorithm represents a scene using a fully-connected (non-convolutional) deep network, whose input is a single continuous 5D coordinate (spatial location \$(x,y,z)\$ and viewing direction \$({\textbackslash}theta, {\textbackslash}phi)\$) and whose output is the volume density and view-dependent emitted radiance at that spatial location. We synthesize views by querying 5D coordinates along camera rays and use classic volume rendering techniques to project the output colors and densities into an image. Because volume rendering is naturally differentiable, the only input required to optimize our representation is a set of images with known camera poses. We describe how to effectively optimize neural radiance fields to render photorealistic novel views of scenes with complicated geometry and appearance, and demonstrate results that outperform prior work on neural rendering and view synthesis. View synthesis results are best viewed as videos, so we urge readers to view our supplementary video for convincing comparisons.},
+	urldate = {2022-08-30},
+	publisher = {arXiv},
+	author = {Mildenhall, Ben and Srinivasan, Pratul P. and Tancik, Matthew and Barron, Jonathan T. and Ramamoorthi, Ravi and Ng, Ren},
+	month = aug,
+	year = {2020},
+	note = {arXiv:2003.08934 [cs]},
+	keywords = {Computer Science - Computer Vision and Pattern Recognition, Computer Science - Graphics},
+	annote = {Comment: ECCV 2020 (oral). Project page with videos and code: http://tancik.com/nerf},
+	file = {arXiv Fulltext PDF:/Users/olestole/Zotero/storage/2CUZ26YM/Mildenhall et al. - 2020 - NeRF Representing Scenes as Neural Radiance Field.pdf:application/pdf;arXiv.org Snapshot:/Users/olestole/Zotero/storage/WWG6P5NU/2003.html:text/html},
+}
+
+@article{mullerInstantNeuralGraphics2022,
+	title = {Instant {Neural} {Graphics} {Primitives} with a {Multiresolution} {Hash} {Encoding}},
+	volume = {41},
+	issn = {0730-0301, 1557-7368},
+	url = {http://arxiv.org/abs/2201.05989},
+	doi = {10.1145/3528223.3530127},
+	abstract = {Neural graphics primitives, parameterized by fully connected neural networks, can be costly to train and evaluate. We reduce this cost with a versatile new input encoding that permits the use of a smaller network without sacrificing quality, thus significantly reducing the number of floating point and memory access operations: a small neural network is augmented by a multiresolution hash table of trainable feature vectors whose values are optimized through stochastic gradient descent. The multiresolution structure allows the network to disambiguate hash collisions, making for a simple architecture that is trivial to parallelize on modern GPUs. We leverage this parallelism by implementing the whole system using fully-fused CUDA kernels with a focus on minimizing wasted bandwidth and compute operations. We achieve a combined speedup of several orders of magnitude, enabling training of high-quality neural graphics primitives in a matter of seconds, and rendering in tens of milliseconds at a resolution of \$\{1920{\textbackslash}!{\textbackslash}times{\textbackslash}!1080\}\$.},
+	number = {4},
+	urldate = {2022-09-02},
+	journal = {ACM Transactions on Graphics},
+	author = {Müller, Thomas and Evans, Alex and Schied, Christoph and Keller, Alexander},
+	month = jul,
+	year = {2022},
+	note = {arXiv:2201.05989 [cs]},
+	keywords = {Computer Science - Computer Vision and Pattern Recognition, Computer Science - Graphics, Computer Science - Machine Learning},
+	pages = {1--15},
+	annote = {Comment: To appear in ACM Transactions on Graphics (SIGGRAPH 2022). 15 pages, 13 figures, 3 tables},
+	file = {arXiv Fulltext PDF:/Users/olestole/Zotero/storage/HNIPLI3Y/Müller et al. - 2022 - Instant Neural Graphics Primitives with a Multires.pdf:application/pdf;arXiv.org Snapshot:/Users/olestole/Zotero/storage/JH66KJMY/2201.html:text/html},
+}
+
+@misc{barronMipNeRF360Unbounded2022,
+	title = {Mip-{NeRF} 360: {Unbounded} {Anti}-{Aliased} {Neural} {Radiance} {Fields}},
+	shorttitle = {Mip-{NeRF} 360},
+	url = {http://arxiv.org/abs/2111.12077},
+	abstract = {Though neural radiance fields (NeRF) have demonstrated impressive view synthesis results on objects and small bounded regions of space, they struggle on "unbounded" scenes, where the camera may point in any direction and content may exist at any distance. In this setting, existing NeRF-like models often produce blurry or low-resolution renderings (due to the unbalanced detail and scale of nearby and distant objects), are slow to train, and may exhibit artifacts due to the inherent ambiguity of the task of reconstructing a large scene from a small set of images. We present an extension of mip-NeRF (a NeRF variant that addresses sampling and aliasing) that uses a non-linear scene parameterization, online distillation, and a novel distortion-based regularizer to overcome the challenges presented by unbounded scenes. Our model, which we dub "mip-NeRF 360" as we target scenes in which the camera rotates 360 degrees around a point, reduces mean-squared error by 57\% compared to mip-NeRF, and is able to produce realistic synthesized views and detailed depth maps for highly intricate, unbounded real-world scenes.},
+	urldate = {2022-09-02},
+	publisher = {arXiv},
+	author = {Barron, Jonathan T. and Mildenhall, Ben and Verbin, Dor and Srinivasan, Pratul P. and Hedman, Peter},
+	month = mar,
+	year = {2022},
+	note = {arXiv:2111.12077 [cs]},
+	keywords = {Computer Science - Computer Vision and Pattern Recognition, Computer Science - Graphics},
+	annote = {Comment: https://jonbarron.info/mipnerf360/},
+	file = {arXiv Fulltext PDF:/Users/olestole/Zotero/storage/9UGVFJCK/Barron et al. - 2022 - Mip-NeRF 360 Unbounded Anti-Aliased Neural Radian.pdf:application/pdf;arXiv.org Snapshot:/Users/olestole/Zotero/storage/5SMM7EYE/2111.html:text/html},
+}
+
+@misc{barronMipNeRFMultiscaleRepresentation2021,
+	title = {Mip-{NeRF}: {A} {Multiscale} {Representation} for {Anti}-{Aliasing} {Neural} {Radiance} {Fields}},
+	shorttitle = {Mip-{NeRF}},
+	url = {http://arxiv.org/abs/2103.13415},
+	abstract = {The rendering procedure used by neural radiance fields (NeRF) samples a scene with a single ray per pixel and may therefore produce renderings that are excessively blurred or aliased when training or testing images observe scene content at different resolutions. The straightforward solution of supersampling by rendering with multiple rays per pixel is impractical for NeRF, because rendering each ray requires querying a multilayer perceptron hundreds of times. Our solution, which we call "mip-NeRF" (a la "mipmap"), extends NeRF to represent the scene at a continuously-valued scale. By efficiently rendering anti-aliased conical frustums instead of rays, mip-NeRF reduces objectionable aliasing artifacts and significantly improves NeRF's ability to represent fine details, while also being 7\% faster than NeRF and half the size. Compared to NeRF, mip-NeRF reduces average error rates by 17\% on the dataset presented with NeRF and by 60\% on a challenging multiscale variant of that dataset that we present. Mip-NeRF is also able to match the accuracy of a brute-force supersampled NeRF on our multiscale dataset while being 22x faster.},
+	urldate = {2022-09-02},
+	publisher = {arXiv},
+	author = {Barron, Jonathan T. and Mildenhall, Ben and Tancik, Matthew and Hedman, Peter and Martin-Brualla, Ricardo and Srinivasan, Pratul P.},
+	month = aug,
+	year = {2021},
+	note = {arXiv:2103.13415 [cs]},
+	keywords = {Computer Science - Computer Vision and Pattern Recognition, Computer Science - Graphics},
+	file = {arXiv Fulltext PDF:/Users/olestole/Zotero/storage/7VEFQ7XK/Barron et al. - 2021 - Mip-NeRF A Multiscale Representation for Anti-Ali.pdf:application/pdf;arXiv.org Snapshot:/Users/olestole/Zotero/storage/ZZFE7EDY/2103.html:text/html},
+}
+
+@misc{tancikBlockNeRFScalableLarge2022,
+	title = {Block-{NeRF}: {Scalable} {Large} {Scene} {Neural} {View} {Synthesis}},
+	shorttitle = {Block-{NeRF}},
+	url = {http://arxiv.org/abs/2202.05263},
+	abstract = {We present Block-NeRF, a variant of Neural Radiance Fields that can represent large-scale environments. Specifically, we demonstrate that when scaling NeRF to render city-scale scenes spanning multiple blocks, it is vital to decompose the scene into individually trained NeRFs. This decomposition decouples rendering time from scene size, enables rendering to scale to arbitrarily large environments, and allows per-block updates of the environment. We adopt several architectural changes to make NeRF robust to data captured over months under different environmental conditions. We add appearance embeddings, learned pose refinement, and controllable exposure to each individual NeRF, and introduce a procedure for aligning appearance between adjacent NeRFs so that they can be seamlessly combined. We build a grid of Block-NeRFs from 2.8 million images to create the largest neural scene representation to date, capable of rendering an entire neighborhood of San Francisco.},
+	urldate = {2022-09-12},
+	publisher = {arXiv},
+	author = {Tancik, Matthew and Casser, Vincent and Yan, Xinchen and Pradhan, Sabeek and Mildenhall, Ben and Srinivasan, Pratul P. and Barron, Jonathan T. and Kretzschmar, Henrik},
+	month = feb,
+	year = {2022},
+	note = {arXiv:2202.05263 [cs]},
+	keywords = {Computer Science - Computer Vision and Pattern Recognition, Computer Science - Graphics},
+	annote = {Comment: Project page: https://waymo.com/research/block-nerf/},
+	file = {arXiv Fulltext PDF:/Users/olestole/Zotero/storage/FXYC4V7M/Tancik et al. - 2022 - Block-NeRF Scalable Large Scene Neural View Synth.pdf:application/pdf;arXiv.org Snapshot:/Users/olestole/Zotero/storage/FSUBV822/2202.html:text/html},
+}
+
+@misc{martin-bruallaNeRFWildNeural2021,
+	title = {{NeRF} in the {Wild}: {Neural} {Radiance} {Fields} for {Unconstrained} {Photo} {Collections}},
+	shorttitle = {{NeRF} in the {Wild}},
+	url = {http://arxiv.org/abs/2008.02268},
+	abstract = {We present a learning-based method for synthesizing novel views of complex scenes using only unstructured collections of in-the-wild photographs. We build on Neural Radiance Fields (NeRF), which uses the weights of a multilayer perceptron to model the density and color of a scene as a function of 3D coordinates. While NeRF works well on images of static subjects captured under controlled settings, it is incapable of modeling many ubiquitous, real-world phenomena in uncontrolled images, such as variable illumination or transient occluders. We introduce a series of extensions to NeRF to address these issues, thereby enabling accurate reconstructions from unstructured image collections taken from the internet. We apply our system, dubbed NeRF-W, to internet photo collections of famous landmarks, and demonstrate temporally consistent novel view renderings that are significantly closer to photorealism than the prior state of the art.},
+	urldate = {2022-09-17},
+	publisher = {arXiv},
+	author = {Martin-Brualla, Ricardo and Radwan, Noha and Sajjadi, Mehdi S. M. and Barron, Jonathan T. and Dosovitskiy, Alexey and Duckworth, Daniel},
+	month = jan,
+	year = {2021},
+	note = {arXiv:2008.02268 [cs]},
+	keywords = {Computer Science - Computer Vision and Pattern Recognition, Computer Science - Graphics, Computer Science - Machine Learning},
+	annote = {Comment: Project website: https://nerf-w.github.io. Ricardo Martin-Brualla, Noha Radwan, and Mehdi S. M. Sajjadi contributed equally to this work. Updated with results for three additional scenes},
+	file = {arXiv Fulltext PDF:/Users/olestole/Zotero/storage/R3NYDSQ5/Martin-Brualla et al. - 2021 - NeRF in the Wild Neural Radiance Fields for Uncon.pdf:application/pdf;arXiv.org Snapshot:/Users/olestole/Zotero/storage/KBFUK4G6/2008.html:text/html},
+}
+
+@misc{tewariStateArtNeural2020,
+	title = {State of the {Art} on {Neural} {Rendering}},
+	url = {http://arxiv.org/abs/2004.03805},
+	abstract = {Efficient rendering of photo-realistic virtual worlds is a long standing effort of computer graphics. Modern graphics techniques have succeeded in synthesizing photo-realistic images from hand-crafted scene representations. However, the automatic generation of shape, materials, lighting, and other aspects of scenes remains a challenging problem that, if solved, would make photo-realistic computer graphics more widely accessible. Concurrently, progress in computer vision and machine learning have given rise to a new approach to image synthesis and editing, namely deep generative models. Neural rendering is a new and rapidly emerging field that combines generative machine learning techniques with physical knowledge from computer graphics, e.g., by the integration of differentiable rendering into network training. With a plethora of applications in computer graphics and vision, neural rendering is poised to become a new area in the graphics community, yet no survey of this emerging field exists. This state-of-the-art report summarizes the recent trends and applications of neural rendering. We focus on approaches that combine classic computer graphics techniques with deep generative models to obtain controllable and photo-realistic outputs. Starting with an overview of the underlying computer graphics and machine learning concepts, we discuss critical aspects of neural rendering approaches. This state-of-the-art report is focused on the many important use cases for the described algorithms such as novel view synthesis, semantic photo manipulation, facial and body reenactment, relighting, free-viewpoint video, and the creation of photo-realistic avatars for virtual and augmented reality telepresence. Finally, we conclude with a discussion of the social implications of such technology and investigate open research problems.},
+	urldate = {2022-11-05},
+	publisher = {arXiv},
+	author = {Tewari, Ayush and Fried, Ohad and Thies, Justus and Sitzmann, Vincent and Lombardi, Stephen and Sunkavalli, Kalyan and Martin-Brualla, Ricardo and Simon, Tomas and Saragih, Jason and Nießner, Matthias and Pandey, Rohit and Fanello, Sean and Wetzstein, Gordon and Zhu, Jun-Yan and Theobalt, Christian and Agrawala, Maneesh and Shechtman, Eli and Goldman, Dan B. and Zollhöfer, Michael},
+	month = apr,
+	year = {2020},
+	note = {arXiv:2004.03805 [cs]},
+	keywords = {Computer Science - Computer Vision and Pattern Recognition, Computer Science - Graphics},
+	annote = {Comment: Eurographics 2020 survey paper},
+	file = {arXiv Fulltext PDF:/Users/olestole/Zotero/storage/573QX7VD/Tewari et al. - 2020 - State of the Art on Neural Rendering.pdf:application/pdf;arXiv.org Snapshot:/Users/olestole/Zotero/storage/7J7VUQHL/2004.html:text/html},
+}
+
+@misc{xieNeuralFieldsVisual2022,
+	title = {Neural {Fields} in {Visual} {Computing} and {Beyond}},
+	url = {http://arxiv.org/abs/2111.11426},
+	abstract = {Recent advances in machine learning have created increasing interest in solving visual computing problems using a class of coordinate-based neural networks that parametrize physical properties of scenes or objects across space and time. These methods, which we call neural fields, have seen successful application in the synthesis of 3D shapes and image, animation of human bodies, 3D reconstruction, and pose estimation. However, due to rapid progress in a short time, many papers exist but a comprehensive review and formulation of the problem has not yet emerged. In this report, we address this limitation by providing context, mathematical grounding, and an extensive review of literature on neural fields. This report covers research along two dimensions. In Part I, we focus on techniques in neural fields by identifying common components of neural field methods, including different representations, architectures, forward mapping, and generalization methods. In Part II, we focus on applications of neural fields to different problems in visual computing, and beyond (e.g., robotics, audio). Our review shows the breadth of topics already covered in visual computing, both historically and in current incarnations, demonstrating the improved quality, flexibility, and capability brought by neural fields methods. Finally, we present a companion website that contributes a living version of this review that can be continually updated by the community.},
+	urldate = {2022-11-05},
+	publisher = {arXiv},
+	author = {Xie, Yiheng and Takikawa, Towaki and Saito, Shunsuke and Litany, Or and Yan, Shiqin and Khan, Numair and Tombari, Federico and Tompkin, James and Sitzmann, Vincent and Sridhar, Srinath},
+	month = apr,
+	year = {2022},
+	note = {arXiv:2111.11426 [cs]},
+	keywords = {Computer Science - Computer Vision and Pattern Recognition, Computer Science - Graphics, Computer Science - Machine Learning},
+	annote = {Comment: Equal advising: Vincent Sitzmann and Srinath Sridhar},
+	file = {arXiv Fulltext PDF:/Users/olestole/Zotero/storage/DQDSH2SU/Xie et al. - 2022 - Neural Fields in Visual Computing and Beyond.pdf:application/pdf;arXiv.org Snapshot:/Users/olestole/Zotero/storage/RY4T8PGI/2111.html:text/html},
+}
+
+@article{loweDistinctiveImageFeatures2004,
+	title = {Distinctive {Image} {Features} from {Scale}-{Invariant} {Keypoints}},
+	volume = {60},
+	issn = {1573-1405},
+	url = {https://doi.org/10.1023/B:VISI.0000029664.99615.94},
+	doi = {10.1023/B:VISI.0000029664.99615.94},
+	abstract = {This paper presents a method for extracting distinctive invariant features from images that can be used to perform reliable matching between different views of an object or scene. The features are invariant to image scale and rotation, and are shown to provide robust matching across a substantial range of affine distortion, change in 3D viewpoint, addition of noise, and change in illumination. The features are highly distinctive, in the sense that a single feature can be correctly matched with high probability against a large database of features from many images. This paper also describes an approach to using these features for object recognition. The recognition proceeds by matching individual features to a database of features from known objects using a fast nearest-neighbor algorithm, followed by a Hough transform to identify clusters belonging to a single object, and finally performing verification through least-squares solution for consistent pose parameters. This approach to recognition can robustly identify objects among clutter and occlusion while achieving near real-time performance.},
+	number = {2},
+	journal = {International Journal of Computer Vision},
+	author = {Lowe, David G.},
+	month = nov,
+	year = {2004},
+	pages = {91--110},
+}
+
+@misc{wiki:Alpha_compositing,
+   author = "Wikipedia",
+   title = "{Alpha compositing} --- {W}ikipedia{,} The Free Encyclopedia",
+   year = "2022",
+   howpublished = {\url{http://en.wikipedia.org/w/index.php?title=Alpha\%20compositing&oldid=1120405603}},
+   note = "[Online; accessed 11-November-2022]"
+ }
+
+ @misc{data:streetview,
+    author = "Ole August Støle", 
+ }
+
+ @misc{data:object-unbounded-ohma,
+    note = "Ohma Electra",
+    author = "Ole August Støle", 
+ }
+
+ @misc{data:object-bounded,
+    author = "Ole August Støle", 
+ }
