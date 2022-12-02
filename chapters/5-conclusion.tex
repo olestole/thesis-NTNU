@@ -7,6 +7,6 @@
 \end{comment}
 
 \section{Future work}
-Scaling NeRFs to larger scenes isn't trivial. As we've explored, the underlying MLP only has a certain capacity. If we were to increase the capacity training times would increase and rendering times would scale linearly. Rendering is already an expensive operation which further supports the claim for another solution. We've discussed Block-NeRF which decouples rendering times and the ability to reconstruct large scenes by leveraging multiple NeRFs to reconstruct an area.
+Scaling NeRFs to larger scenes isn't trivial. As we've explored, the underlying MLP only has a certain capacity. If we were to increase the capacity, training times would increase and rendering times would scale linearly. Rendering is already an expensive operation which further supports the claim for another solution. We've discussed Block-NeRF which decouples rendering times and the ability to reconstruct large scenes by leveraging multiple NeRFs to reconstruct an area.
 
 There aren't a lot of papers exploring large-scale NeRFs. This might be due to the amount of data needed and the corresponding data capture endeavor. In future work, it would be interesting to explore the balance between representing scenes with a single NeRF and when it would make sense to split the scenes into separate NeRFs.

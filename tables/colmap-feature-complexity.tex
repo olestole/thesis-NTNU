@@ -1,0 +1,12 @@
+\begin{table}[h] 
+\centering
+\begin{tabular}{lcc}
+\hline
+Matching algorithm & \multicolumn{1}{l}{Time complexity} & \multicolumn{1}{l}{Space complexity} \\ \hline
+Exhaustive         & $\mathcal{O}(n^2)$       & $\mathcal{O}(n^2)$  \\
+Sequential         & $\mathcal{O}(n k)$ & $\mathcal{O}(n k)$        \\
+Vocabulary Tree    & $\mathcal{O}(n^2)$*       & $\mathcal{O}(n k)$  \\ \hline
+\end{tabular}
+\caption{An overview of the time and memory complexities of a selection of COLMAP matching algorithms. For sequential matching $k$ is the number of adjacent images each image $n$ is matched against. For Vocabulary tree-based matching, $k$ is the number of top-retrieved images that each image $n$ is matched against.}
+\label{tab:colmap-feature-complexity}
+\end{table}
