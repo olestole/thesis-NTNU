@@ -1,10 +1,12 @@
-\chapter{Conclusion}
+\chapter{Discussion}
 
 \begin{comment}
 - Loop back to the introduction, review - claim - agenda
     - In this thesis, we have seen how we can reconstruct 3D scenes and render novel views by optimizing NeRFs on 2D input images.
     - The pipeline for creating NeRFs has become greatly simplified recently. As we've seen we can without problems optimize a NeRF in ~4.5 minutes.
 \end{comment}
+
+Issues with COLMAP: Relying on COLMAP to extract the camera poses from videos or images provides some challenges. All the images should have approximately the same appearance and the images usually need a severe overlap.
 
 \section{Future work}
 Scaling NeRFs to larger scenes isn't trivial. As we've explored, the underlying MLP only has a certain capacity. If we were to increase the capacity, training times would increase and rendering times would scale linearly. Rendering is already an expensive operation which further supports the claim for another solution. We've discussed Block-NeRF which decouples rendering times and the ability to reconstruct large scenes by leveraging multiple NeRFs to reconstruct an area.

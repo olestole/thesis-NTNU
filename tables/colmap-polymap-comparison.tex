@@ -1,0 +1,14 @@
+\begin{table}[h]
+\centering
+\begin{tabular}{lcccc}
+\hline
+Method  & PSNR $\uparrow$ & SSIM $\uparrow$ & LPIPS $\downarrow$& Time  \\ \hline
+%COLMAP - Sequential         & -    & -     & -    & -     \\
+%COLMAP - Vocabulary tree    & -    & -     & -    & -     \\
+COLMAP - Exhaustive         & 20.408    & 0.520    &  0.431     & 154:33     \\
+Polycam                     & 21.488    & 0.544    & 0.413      & 00:11 \\
+\hline
+\end{tabular}
+\caption{Using the corrected camera poses from Polycam renders better results on all metrics, and is significantly faster than calculating the camera poses with COLMAP after the capture.}
+\label{tab:colmap-polycam-comparison}
+\end{table}
