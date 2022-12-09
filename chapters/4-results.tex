@@ -64,9 +64,6 @@ We explore the impact of sampling different number of images from a video. The i
 
 
 \section{Capturing}
-\subsection{Polycam vs. COLMAP}
-%- Run COLMAP on the images captured from Polycam. Compare the results.
-
 \autoref{tab:colmap-polycam-comparison} shows the performance of two different methods for capturing data: COLMAP with vocabulary tree search and Polycam. Capturing data with Polycam uses LiDAR and enables the almost immediate extraction of images with the corresponding camera poses. An analysis of the quality and time consumption of different capturing processes can provide valuable insights into which methods produce the best results and which are most effective. By comparing the performance of different methods on metrics such as PSNR, SSIM, and LPIPS, it is possible to identify the strengths and weaknesses of each method and determine which is most suitable for a given application. Additionally, considering the time consumption of each method can help to evaluate the efficiency of the capturing process and determine which method is most effective in terms of the trade-off between quality and speed. Overall, this analysis can help to inform decisions about which capturing process to use in different scenarios.
 
 \input{tables/colmap-polymap-comparison.tex}

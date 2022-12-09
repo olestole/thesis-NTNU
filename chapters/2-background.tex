@@ -1,5 +1,8 @@
 \chapter{Background} \label{chap:relatedwork}
 
+The background chapter of this paper focuses on the use of Neural Radiance Fields (NeRFs) for representing and rendering 3D scenes. The chapter discusses several important NeRF methods, including NeRF, Mip-NeRF 360, Block NeRF, and Instant-ngp. Additionally, the chapter covers several key techniques used in the NeRF pipeline, including Positional Encoding, Hierarchical sampling, Stratified sampling, Appearance embeddings, Learned pose refinement, and Visibility prediction.
+
+The chapter also discusses the use of Structure from Motion and COLMAP as important tools for the pre-processing step in NeRF pipeline, and presents several metrics for evaluating NeRFs, including PSNR, SSIM, and LPIPS. By providing an overview of these methods, techniques, tools, and metrics, the background chapter aims to establish a common ground for later chapters.
 % --------------------- Volume rendering ---------------------
 \section{Volume rendering} \label{sec:volumerendering}
 Volume rendering is a technique for visualizing 3D data sets, such as those obtained from medical imaging scans. It works by computing a 2D projection of a 3D volume, using algorithms to assign colors and opacities to each point in the volume based on its physical characteristics, such as density or temperature. Many visual effects are volumetric in nature, e.g. fluids, clouds, flames, smoke, fog, and dust. These effects are challenging to simulate with geometric primitives like points, lines, triangles, or polygon meshes, and may be better simulated with volume rendering. A volume renderer may also be used to display not just the model's surfaces but all of its fine external and internal details, allowing the user to see inside the volume to get a better understanding of its internal structure. Because of this, volume rendering is a powerful tool for visualizing complex 3D data and can be used in a wide range of applications, including medical imaging, scientific visualization, and computer graphics\cite{max_optical_1995}.
@@ -54,7 +57,6 @@ NeRFs are made possible due to differentiable rendering, a major breakthrough in
 
 % --------------------- NeRF ---------------------
 \section{NeRF - Representing Scenes as Neural Radiance Fields for View Synthesis}
-\input{figures/nerf-pipeline.tex}
 The first paper to present Neural Radiance Fields (NeRFs) was \cite{mildenhall_nerf_2020}. NeRFs provides a method for reconstructing 3D scenes and synthesizing novel views. Given multiple 2D images and their corresponding camera poses, NeRF builds a dataset by sampling points in the volume. The points in the dataset are passed through an MLP in order to predict the given points' density and color. The predicted density and color values are then composited into a final color which is compared to the reference image pixel's color. The MLP is optimized to minimize the difference between the predicted and reference pixel color.
 
 %NeRF does this by querying an underlying MLP overfit to a specific scene, which represents a continuous volumetric field.
@@ -90,6 +92,8 @@ Since volume rendering is differentiable, we optimize the loss between the synth
 
 An overview of the NeRF pipeline can be viewed in \autoref{fig:nerf-pipeline}
 
+\input{figures/nerf-pipeline.tex}
+
 \subsubsection{Positional Encoding} \label{sec:positionalencoding}
 Positional encoding is one of the many proposed encoding schemes, first introduced in the original NeRF paper. It is a method used to increase the dimensionality of an input vector, as it's shown that deep networks are biased toward learning lower-frequency functions. It is not to be confused with positional encoding in transformers. 
 
@@ -116,7 +120,6 @@ Stratified sampling is a sampling method. It has proven benefits in machine lear
 % --------------------- Other models that Nerfacto builds on ---------------------
 % --------------------- mip-NeRF ---------------------
 \section{Mip-Nerf} \label{sec:mipnerf}
-\input{figures/mip-nerf-pipeline-overview.tex}
 NeRF shows good performance when all training and testing photos are taken at about the same distance from the scene, and it doesn't have to reason about scale or aliasing. When you add more cameras, pulled away from the scene, NeRF starts to break down, because it's a single-scale model now trying to solve a multi-scale problem. Renderings from the NeRF will show aliasing artifacts in distant views and excessive blur in close-up views.
 
 A solution to this problem would be to adapt a solution that is used in offline ray tracing, supersampling. With supersampling, we would march multiple rays through the same pixel's footprint. This technique doesn't solve the issue of aliasing effects, but the rendered image would look better. However, doing so would be very computationally expensive and it would increase the already very long training times of NeRF, which already depends on querying an underlying MLP hundreds of times for a single ray.
@@ -129,12 +132,14 @@ Instead of positionally encoding a single point along the ray, we compute the ex
 
 Inspiration to this method is taken from mipmapping which traditionally has been used to prevent aliasing in computer graphics pipelines. A mipmap is a pre-filtered set of discretely downsampled signals, very often images, which helps speed up rendering as the responsibility of anti-aliasing is shifted to a precomputation phase. Mip-NeRF extends NeRF to simultaneously represent the pre-filtered radiance field for a continuous space of scales, thereof "mip-NeRF".
 
+An overview of the mip-NeRF pipeline can be seen in \autoref{fig:mip-nerf-pipeline-overview}. The main difference from the NeRF-pipeline as portrayed in \autoref{fig:nerf-pipeline} is the mip-NeRF field that now employ the Integrated Positional Encoding.
+
+\input{figures/mip-nerf-pipeline-overview.tex}
 
 
 
 % --------------------- mip-NeRF 360 ---------------------
 \section{Mip-NeRF 360} \label{sec:mipnerf360}
-\input{figures/mip-nerf-360-pipeline-overview.tex}
 Mip-NeRF provides a lot of helpful techniques in order to proceed with the evolution of NeRFs, but it focuses on forward-facing scenes instead of unbounded scenes; scenes with a main object of interest in front of an elaborate background. This is where Mip-NeRF 360 picks up, it addresses challenges with extending mip-NeRF to unbounded scenes. There are primarily three techniques proposed by Mip-NeRF 360 which we'll cover in this section.
 
 \textbf{Representation}:
@@ -170,6 +175,10 @@ Per image appearance conditioning is a technique proposed for NeRFs in \cite{mar
 
 \subsection{Learned pose refinement} \label{sec:camera-pose-refinement}
 Camera pose refinement is a technique proposed for NeRFs on forward-facing scenes in \cite{wang_nerf--_2022}. It has later been built upon to support imperfect camera poses for full 3D scene representations in \cite{lin_barf_2021}. Block-NeRF leverages pose refinement on large unbounded scenes. It is a technique proposed to reduce the impact of imperfect camera poses. In NeRF, this can be done by treating the camera poses and intrinsics as learnable parameters and jointly optimizing them with the 3D scene representation, i.e. optimizing both the photometric loss and the corresponding camera poses. Pose refinement is a very effective measure to reduce cloudy artifacts and increase the sharpness and overall quality of the resulting 3D representation.
+
+An overview of the mip-NeRF 360 pipeline can be seen in \autoref{fig:mip-nerf-360-pipeline-overview}. Note that the pipeline has a number of differences from the previous mip-NeRF pipeline portrayed in \autoref{fig:mip-nerf-pipeline-overview}. There is no redundant RGB-value being rendered and there are two different fields; one density field and one mip-NeRF field.
+
+\input{figures/mip-nerf-360-pipeline-overview.tex}
 
 \subsection{Visibility prediction}
 Visibility prediction is done in order to predict if a given point is within the line of sight of a specific block-NeRF. The prediction is done by a secondary MLP $F_v$ that is trained to learn an approximation of the visibility of a sampled point. Given a location and a viewing direction, $F_v$ outputs an approximation of that location's transmittance ($T$ in \autoref{eq:volume-rendering}). The transmittance of a location will be close to 1 if it's visible, i.e. located in free space or on the surface of the first intersected object. Objects inside or behind the first intersected object will have a transmittance close to 0. If the point is seen from multiple viewing directions, the resulting transmittance will be the average of these observations. $F_v$ is supervised by the block-NeRF's main MLP $F_\sigma$.
