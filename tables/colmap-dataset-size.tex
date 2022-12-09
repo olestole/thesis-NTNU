@@ -1,3 +1,4 @@
+\begin{comment}
 \begin{table}[h]
 \centering
 \begin{tabular}{ccccccc}
@@ -14,5 +15,22 @@
 \multicolumn{1}{l}{100\%} & -    & -     & -    & -    & -    & -    \\ \hline
 \end{tabular}
 \caption{An overview of how dataset size impacts render-quality and process-, training- and evaluation-time. Trained on \autoref{fig:ohma-electra} with a vanilla Nerfacto pipeline}
+\label{tab:colmap-dataset-size}
+\end{table}
+\end{comment}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|ccccccc|}
+\hline
+\% Frames & PSNR $\uparrow$ & SSIM $\uparrow$ & LPIPS $\downarrow$ & Process & Training & Evaluate \\ \hline
+20\%        & 19.692    & 0.523     & 0.272    & 36:55    & 20:40    & 00:44    \\
+25\%        & 20.043    & 0.544     & 0.269    & 57:09    & 19:06    & 00:50    \\
+33\%        & 20.135    & 0.547     & 0.273    & 82:08    & 20:15    & 01:05    \\
+50\%        & 21.103    & 0.590     & 0.273    & 167:07    & 20:56    & 01:30    \\
+100\%       & -    & -     & -    & -    & -    & -    \\
+\hline
+\end{tabular}
+\caption{An overview of how dataset size impacts render-quality and process-, training- and evaluation-time. Trained on the ohma-electra dataset, as shown in \autoref{fig:ohma-electra}, with a default Nerfacto pipeline}
 \label{tab:colmap-dataset-size}
 \end{table}

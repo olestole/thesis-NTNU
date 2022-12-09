@@ -1,12 +1,41 @@
 \begin{table}[h]
 \centering
-\begin{tabular}{ccccc}
+\begin{tabular}{|lcccc|}
 \hline
-Method      & PSNR & LPIPS & SSIM & Time \\ \hline
+\multicolumn{5}{|c|}{\textbf{Fox scene, \autoref{fig:fox-dataset}}} \\ 
+\hline
+Method  & PSNR $\uparrow$ & SSIM $\uparrow$ & LPIPS $\downarrow$& Time  \\ 
+\hline
+NeRF        & -    & -     & -    & -    \\
+mip-NeRF    & -    & -     & -    & -    \\
+instant-ngp & 26.370    & 0.863     & 0.214    & 47:45    \\
+Nerfacto    & 27.698    & 0.859     & 0.190    & 31:28    \\
+\hline
+
+\hline
+\multicolumn{5}{|c|}{\textbf{Ohma Electra scene, \autoref{fig:ohma-electra}}} \\ 
+\hline
+Method  & PSNR $\uparrow$ & SSIM $\uparrow$ & LPIPS $\downarrow$& Time  \\ 
+\hline
 NeRF        & -    & -     & -    & -    \\
 mip-NeRF    & -    & -     & -    & -    \\
 instant-ngp & -    & -     & -    & -    \\
-Nerfacto    & -    & -     & -    & -    \\ \hline
+Nerfacto    & 20.135    & 0.547     & 0.273    & 20:15    \\ 
+\hline
+
+\hline
+\multicolumn{5}{|c|}{\textbf{Lego scene, \autoref{fig:ohma-electra}}} \\ 
+\hline
+Method  & PSNR $\uparrow$ & SSIM $\uparrow$ & LPIPS $\downarrow$& Time  \\ 
+\hline
+NeRF        & -    & -     & -    & -    \\
+mip-NeRF    & -    & -     & -    & -    \\
+instant-ngp (Default)     & -    & -     & -    & -    \\
+instant-ngp (Adjusted)     & 33.854    & 0.969     & 0.0128    & 21:56    \\
+Nerfacto (Default)    & 8.922    & 0.576     & 0.586    & 28:39    \\ 
+Nerfacto (Adjusted)    & 19.544    & 0.759     & 0.113    & 28:05    \\ 
+\hline
 \end{tabular}
+\caption{Same scene pre-processed in the same way with the default amount of frames and trained for equal amounts of epochs.}
 \label{tab:method-comparison}
 \end{table}

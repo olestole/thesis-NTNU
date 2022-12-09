@@ -1,0 +1,16 @@
+\chapter{Conclusion & Future Work}
+This chapter will conclude the project and discuss future work.
+
+
+
+
+\section{Future work}
+Scaling NeRFs to larger scenes isn't trivial. As we've explored, the underlying MLP only has a certain capacity. If we were to increase the capacity, training times would increase and rendering times would scale linearly. Rendering is already an expensive operation which further supports the claim for another solution. We've discussed Block-NeRF which decouples rendering times and the ability to reconstruct large scenes by leveraging multiple NeRFs to reconstruct an area.
+
+There aren't a lot of papers exploring large-scale NeRFs. This might be due to the amount of data needed and the corresponding data capture endeavor. In future work, it would be interesting to explore the balance between representing scenes with a single NeRF and when it would make sense to split the scenes into separate NeRFs.
+
+\subsection{Large scale data collection}
+In order to collect data for the large scale NeRF we have access to NAPLab's car. The car features eight calibrated cameras, resulting in a 360\deg field of vision around the car. In combination with GNSS and GPS, the car's rig should enable capturing images with corresponding camera poses, within 1-3cm accuracy.
+
+\section{Area size}
+We explore the impact of area size. Area in itself is poorly defined in the context of NeRF, since scale is perspective relative, depending on the level of detail you want. A single NeRF can efficiently represent a 3D model of the entire world, but the level of detail won't be satisfactory as you try to render detailed images. In this experiment we'll use a self-captured scene as the benchmark for area-related experiments. The scene \cite{data:streetview} is captured on a relatively straight street, bounded by houses on each side. 

@@ -116,6 +116,7 @@ Stratified sampling is a sampling method. It has proven benefits in machine lear
 % --------------------- Other models that Nerfacto builds on ---------------------
 % --------------------- mip-NeRF ---------------------
 \section{Mip-Nerf} \label{sec:mipnerf}
+\input{figures/mip-nerf-pipeline-overview.tex}
 NeRF shows good performance when all training and testing photos are taken at about the same distance from the scene, and it doesn't have to reason about scale or aliasing. When you add more cameras, pulled away from the scene, NeRF starts to break down, because it's a single-scale model now trying to solve a multi-scale problem. Renderings from the NeRF will show aliasing artifacts in distant views and excessive blur in close-up views.
 
 A solution to this problem would be to adapt a solution that is used in offline ray tracing, supersampling. With supersampling, we would march multiple rays through the same pixel's footprint. This technique doesn't solve the issue of aliasing effects, but the rendered image would look better. However, doing so would be very computationally expensive and it would increase the already very long training times of NeRF, which already depends on querying an underlying MLP hundreds of times for a single ray.
@@ -133,6 +134,7 @@ Inspiration to this method is taken from mipmapping which traditionally has been
 
 % --------------------- mip-NeRF 360 ---------------------
 \section{Mip-NeRF 360} \label{sec:mipnerf360}
+\input{figures/mip-nerf-360-pipeline-overview.tex}
 Mip-NeRF provides a lot of helpful techniques in order to proceed with the evolution of NeRFs, but it focuses on forward-facing scenes instead of unbounded scenes; scenes with a main object of interest in front of an elaborate background. This is where Mip-NeRF 360 picks up, it addresses challenges with extending mip-NeRF to unbounded scenes. There are primarily three techniques proposed by Mip-NeRF 360 which we'll cover in this section.
 
 \textbf{Representation}:
@@ -221,7 +223,7 @@ There is definitively literature on the topic of the time and memory complexity 
 
 
 % --------------------- Evaluating NeRFs ---------------------
-\section{Evaluating NeRFs}
+\section{Evaluating NeRFs} \label{sec:evaluating-nerfs}
 Evaluating the quality of NeRFs is inherently hard since it's a visual modality. After a NeRF is trained it will eventually be used to render an image. Image similarity metrics are consequently the most important metric to evaluate the quality of a NeRF. The assessment of image similarity has been a long-standing challenge in computer graphics, but the following metrics are commonly used throughout most papers comparing NeRFs.
 
 \subsection{PSNR - Peak Signal-to-Noise Ratio}

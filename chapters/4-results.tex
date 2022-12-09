@@ -1,5 +1,7 @@
 \chapter{Results}
 
+The following chapter presents the results of our study on a selection of datasets. I begin by providing an overview of each dataset. Afterward, the results of multiple experiments that we conducted are presented, including a description of each experiment and the corresponding results. The aim is to showcase some findings and give insight into the process of utilizing NeRFs.
+
 \begin{comment}
 
 Experiments:
@@ -48,38 +50,37 @@ SCENES:
 
 
 
-\section{Dataset}
-\input{figures/ohma-electra.tex}
-\input{figures/tier.tex}
-\input{figures/streetview-dataset.tex}
-\input{figures/octahedron-dataset.tex}
-
-\section{Dataset size}
-We explore the impact of sampling different number of images from a video. The input video of Ohma Electra \cite{data:object-unbounded-ohma} is 47 seconds long, captured at 30 FPS resulting in 1410 total frames. Leveraging FFMPEG we sample frames at 4 increasingly dense levels.
-
-\input{tables/colmap-dataset-size.tex}
-
-Increasing the dataset size increases the amount of time required to retrieve the camera poses, given they're not known a priori. As discussed in \autoref{sec:colmap}, COLMAP has several different feature matching algorithms, e.g. exhaustive, sequential, and vocabulary tree matching. The choice of a matching algorithm should depend on the type of capture, e.g. if the source of the sampled images is a video it entails that subsequent frames have a certain overlap and makes sequential matching a sensible choice. The time complexity of COLMAP and its matching algorithms is important as the dataset size increases, as it might consume a lot of the time in the overall process-train-render pipeline. An overview of the selected matching algorithms' complexities can be seen in \autoref{tab:colmap-feature-complexity}.
-
-\section{Area size}
-We explore the impact of area size. Area in itself is poorly defined in the context of NeRF, since scale is perspective relative, depending on the level of detail you want. A single NeRF can efficiently represent a 3D model of the entire world, but the level of detail won't be satisfactory as you try to render detailed images. In this experiment we'll use a self-captured scene as the benchmark for area-related experiments. The scene \cite{data:streetview} is captured on a relatively straight street, bounded by houses on each side. 
-
-\input{tables/area-size.tex}
-
 \section{Different methods}
-There are multiple different methods proposed for reconstructing 3D scenes and rendering novel views.
+There are multiple different methods proposed for reconstructing 3D scenes and rendering novel views. In this experiment we compare four of the methods that are currently implemented in Nerfstudio. Even though the original NeRF-implementation and mip-NeRF doesn't support unbounded scenes, we conduct an experiment with an unbounded scene to see the results. To make it fair across the methods, we also conduct a separate experiment with a forward-facing scene, and a last experiment on a blender dataset, more appropriately set up for NeRF and mip-NeRF.
+
+Using the different methods on Blender-data yield interesting results. The Nerfacto and instant-ngp models are designed to handle real captures and need some adjustment in order to learn the bounded Blender-scenes. Primarily this adjustment consists of defining the near- and far plane for the rays.
 
 \input{tables/method-comparison.tex}
 
+\section{Dataset size}
+We explore the impact of sampling different number of images from a video. The input video of Ohma Electra \cite{data:object-unbounded-ohma} is 47 seconds long, captured at 30 FPS resulting in 1410 total frames. Leveraging FFMPEG we sample frames at 5 increasingly dense levels. We start with sampling 1 frame every 5 frames, resulting in 20\% of the frames. We decrease the sample spacing iteratively, until we sample 100\% of the frames. Increasing the dataset size increases the amount of time required to retrieve the camera poses, given they're not known a prior. The outcome in quality and time consumption can be seen in \autoref{tab:colmap-dataset-size}.
 
+\input{tables/colmap-dataset-size.tex}
 
 
 \section{Capturing}
 \subsection{Polycam vs. COLMAP}
 %- Run COLMAP on the images captured from Polycam. Compare the results.
 
+\autoref{tab:colmap-polycam-comparison} shows the performance of two different methods for capturing data: COLMAP with vocabulary tree search and Polycam. Capturing data with Polycam uses LiDAR and enables the almost immediate extraction of images with the corresponding camera poses. An analysis of the quality and time consumption of different capturing processes can provide valuable insights into which methods produce the best results and which are most effective. By comparing the performance of different methods on metrics such as PSNR, SSIM, and LPIPS, it is possible to identify the strengths and weaknesses of each method and determine which is most suitable for a given application. Additionally, considering the time consumption of each method can help to evaluate the efficiency of the capturing process and determine which method is most effective in terms of the trade-off between quality and speed. Overall, this analysis can help to inform decisions about which capturing process to use in different scenarios.
+
 \input{tables/colmap-polymap-comparison.tex}
 
+
+\section{NeRFs in VR}
+NeRF has shown great capabilities in rendering novel views and enabling the generation of fly-through videos of learned scenes. Another field of interest has been to bring NeRFs into extended reality (XR). Immersive-ngp \cite{immersive-ngp} created a Unity-plugin that enables just this. With heavy utilization of already implemented functionality from instant-ngp, it enables 6 degrees of freedom (DoF) continuous locomotion in virtual reality (VR). The results from training on the tier-dataset, as portrayed in \autoref{fig:tier}, can be viewed in \autoref{fig:tier_vr} and here.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{figures/tier_vr.png}
+    \caption{NeRF viewed in VR with the help of immersive-ngp \cite{immersive-ngp}}
+    \label{fig:tier_vr}
+\end{figure}
 
 
 % From Discord thread

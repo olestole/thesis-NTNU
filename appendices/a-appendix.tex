@@ -1,5 +1,103 @@
-\chapter{Additional Material}
-\label{app:additional}
+\chapter{Additional Material} \label{app:additional}
+
+\section{Parameters for the training in Nerfstudio}
+
+\subsection{Nerfacto}
+\begin{table}[h]
+    \begin{tabular}{|l|l|}
+    \hline
+    Description                                             & Default Value \\
+    \hline
+    How far along the ray to start sampling.                & 0.05 \\
+    How far along the ray to stop sampling.                 & 1000.0 \\
+    %Whether to randomize the background color.              & \"last\_sample\" \\
+    %Number of samples per ray for the proposal network.     & \(256, 96\) \\
+    Number of samples per ray for the nerf network.         & 48 \\
+    Sample every n steps after the warmup                   & 5 \\
+    Scales n from 1 to proposal\_update\_every over this many steps & 5000 \\
+    Number of proposal network iterations.                  & 2 \\
+    Use the same proposal network. Otherwise use different ones. & False \\
+    Proposal loss multiplier.                               & 1.0 \\
+    Distortion loss multiplier.                             & 0.002 \\
+    Orientation loss multipier on computed noramls.         & 0.0001 \\
+    Predicted normal loss multiplier.                       & 0.001 \\
+    Whether to use proposal weight annealing.               & True \\
+    Whether to use average appearance embedding or zeros for inference. & True \\
+    Slope of the annealing function for the proposal weights & 10.0 \\
+    Max num iterations for the annealing function.          & 1000 \\
+    Whether use single jitter or not for the proposal networks. & True \\
+    Whether to predict normals or not.                      & False \\
+    \hline
+    \hline
+    Description of corresponding proposal density fields    & Default Value \\
+    \hline
+    Dimension of hidden layer           & 16 \\
+    Hashmap size                        & $2^{17}$ \\
+    Number of levels of the hashmap     & 5 \\
+    Maximum resolution of the hashmap (density field 1)         & 64 \\
+    Maximum resolution of the hashmap (density field 2)         & 256 \\
+    \hline
+    \end{tabular}
+    \caption{An overview of the parameters in the default Nerfacto model}
+    \label{tab:nerfacto-parameter-overview}
+\end{table}
+
+\subsection{Instant-ngp}
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|l|l|}
+    \hline
+    \textbf{Description} & \textbf{Value} \\ 
+    \hline
+    Whether to create a scene collider to filter rays. & False \\
+    Number of samples in field evaluation. & 24 \\
+    Resolution of the grid used for the field. & 128 \\
+    Contraction type. & Unbounded Sphere \\
+    Cone angle & 0.004 \\
+    Minimum step size for rendering. & 0.01 \\
+    How far along ray to start sampling. & 0.05 \\
+    How far along ray to stop sampling. & 1e3 \\
+    Whether to use an appearance embedding. & False \\
+    Whether to randomize the background color. & True \\ \hline
+    \end{tabular}
+    \caption{An overview of the parameters in the default Instant-ngp model}
+    \label{tab:instant-ngp-parameter-overview}
+\end{table}
+
+\subsection{NeRF}
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|l|l|}
+    \hline
+    \textbf{Description} & \textbf{Value} \\ 
+    \hline
+    Number of samples in coarse field evaluation & 64 \\
+    Number of samples in fine field evaluation & 128 \\
+    Specifies whether or not to include ray warping based on time. & False \\
+    \hline
+    \end{tabular}
+    \caption{An overview of the parameters in the default NeRF model}
+    \label{tab:instant-ngp-parameter-overview}
+\end{table}
+
+\subsection{mip-NeRF}
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|l|l|}
+    \hline
+    \textbf{Description} & \textbf{Value} \\ 
+    \hline
+    Whether to create a scene collider to filter rays.  & True \\
+    Near plane collider-plane.                          & 2.0 \\
+    Far plane collider-plane.                           & 6.0 \\
+    The loss coeficcient for the coarse MLP.            & 1.0 \\
+    The loss coeficcient for the fine MLP.              & 1.0 \\
+    Number of rays per chunk during eval                & 4096 \\
+    \hline
+    \end{tabular}
+    \caption{An overview of the parameters in the default NeRF model}
+    \label{tab:instant-ngp-parameter-overview}
+\end{table}
 
 Additional material that does not fit in the main thesis but may still be relevant to share, e.g., raw data from experiments and surveys, code listings, additional plots, pre-project reports, project agreements, contracts, logs etc., can be put in appendices. Simply issue the command \texttt{\textbackslash appendix} in the main \texttt{.tex} file, and make one chapter per appendix.
 
