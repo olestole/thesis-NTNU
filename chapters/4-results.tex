@@ -58,7 +58,7 @@ Using the different methods on Blender-data yield interesting results. The Nerfa
 \input{tables/method-comparison.tex}
 
 \section{Dataset size}
-We explore the impact of sampling different number of images from a video. The input video of Ohma Electra \cite{data:object-unbounded-ohma} is 47 seconds long, captured at 30 FPS resulting in 1410 total frames. Leveraging FFMPEG we sample frames at 5 increasingly dense levels. We start with sampling 1 frame every 5 frames, resulting in 20\% of the frames. We decrease the sample spacing iteratively, until we sample 100\% of the frames. Increasing the dataset size increases the amount of time required to retrieve the camera poses, given they're not known a prior. The outcome in quality and time consumption can be seen in \autoref{tab:colmap-dataset-size}.
+We explore the impact of sampling different number of images from a video. The input video of Ohma Electra, as portrayed in \autoref{fig:ohma-electra}, is 47 seconds long, captured at 30 FPS resulting in 1410 total frames. Leveraging FFMPEG we sample frames at 5 increasingly dense levels. We start with sampling 1 frame every 5 frames, resulting in 20\% of the frames. We decrease the sample spacing iteratively, until we sample 100\% of the frames. Increasing the dataset size increases the amount of time required to retrieve the camera poses, given they're not known a prior. The outcome in quality and time consumption can be seen in \autoref{tab:colmap-dataset-size}.
 
 \input{tables/colmap-dataset-size.tex}
 

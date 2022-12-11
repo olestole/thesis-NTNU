@@ -1,41 +1,49 @@
 \begin{table}[h]
 \centering
-\begin{tabular}{|lcccc|}
+\begin{tabular}{|l|llll|}
 \hline
 \multicolumn{5}{|c|}{\textbf{Fox scene, \autoref{fig:fox-dataset}}} \\ 
 \hline
 Method  & PSNR $\uparrow$ & SSIM $\uparrow$ & LPIPS $\downarrow$& Time  \\ 
 \hline
-NeRF        & -    & -     & -    & -    \\
-mip-NeRF    & -    & -     & -    & -    \\
+NeRF        & 10.804    & 0.620     & 0.573    & 32:00:00*   \\
+mip-NeRF    & 10.799    & 0.624     & 0.545    & 32:00:00*    \\
 instant-ngp & 26.370    & 0.863     & 0.214    & 47:45    \\
 Nerfacto    & 27.698    & 0.859     & 0.190    & 31:28    \\
 \hline
-
 \hline
 \multicolumn{5}{|c|}{\textbf{Ohma Electra scene, \autoref{fig:ohma-electra}}} \\ 
 \hline
 Method  & PSNR $\uparrow$ & SSIM $\uparrow$ & LPIPS $\downarrow$& Time  \\ 
 \hline
-NeRF        & -    & -     & -    & -    \\
-mip-NeRF    & -    & -     & -    & -    \\
-instant-ngp & -    & -     & -    & -    \\
+NeRF        & -    & -     & -    & 32:00:00*    \\
+mip-NeRF    & -    & -     & -    & 32:00:00*    \\
+instant-ngp & 22.090    & 0.588     & 0.389    & 34:51    \\
 Nerfacto    & 20.135    & 0.547     & 0.273    & 20:15    \\ 
 \hline
-
 \hline
-\multicolumn{5}{|c|}{\textbf{Lego scene, \autoref{fig:ohma-electra}}} \\ 
+\multicolumn{5}{|c|}{\textbf{T-Rex scene, \autoref{fig:trex-dataset}}} \\ 
 \hline
 Method  & PSNR $\uparrow$ & SSIM $\uparrow$ & LPIPS $\downarrow$& Time  \\ 
 \hline
-NeRF        & -    & -     & -    & -    \\
-mip-NeRF    & -    & -     & -    & -    \\
+NeRF        & -    & -     & -    & 32:00:00*    \\
+mip-NeRF    & -    & -     & -    & 32:00:00*    \\
+instant-ngp    & 26.233    & 0.896     & 0.0626    & 30:06    \\
+Nerfacto    & 20.489    & 0.672     & 0.0697    & 27:57    \\ 
+\hline
+\hline
+\multicolumn{5}{|c|}{\textbf{Lego scene, \autoref{fig:lego-dataset}}} \\ 
+\hline
+Method  & PSNR $\uparrow$ & SSIM $\uparrow$ & LPIPS $\downarrow$& Time  \\ 
+\hline
+NeRF        & 32.209    & 0.961     & 0.0177    & 32:00:00*    \\
+mip-NeRF    & 31.240    & 0.957     & 0.0220    & 32:00:00*    \\
 instant-ngp (Default)     & -    & -     & -    & -    \\
 instant-ngp (Adjusted)     & 33.854    & 0.969     & 0.0128    & 21:56    \\
 Nerfacto (Default)    & 8.922    & 0.576     & 0.586    & 28:39    \\ 
 Nerfacto (Adjusted)    & 19.544    & 0.759     & 0.113    & 28:05    \\ 
 \hline
 \end{tabular}
-\caption{Same scene pre-processed in the same way with the default amount of frames and trained for equal amounts of epochs.}
+\caption{Same scene pre-processed in the same way with the default amount of frames. $\ast$NeRF and mip-NeRF were both capped to 32 hours of training which resulted in approximately 500'000 steps}
 \label{tab:method-comparison}
 \end{table}

@@ -1,20 +1,12 @@
 \chapter{Method}
 
-The method chapter of this paper describes the process of generating Neural Radiance Fields (NeRFs) using software to test multiple different methods. NeRFs are a novel approach to computer graphics that have shown promising results in recent studies. In this chapter, we will cover the five key steps involved in the NeRF generation process: capture, process, training, rendering, and evaluating. Lastly we'll have a look at the dataset captured and used throughout the experiments.
+The method chapter of this paper describes the process of generating Neural Radiance Fields (NeRFs). We will cover the five key steps involved in the NeRF generation process: capture, process, training, rendering, and evaluating. Lastly we'll have a look at the dataset captured and used throughout the experiments.
 
-Our approach to generating NeRFs leverages state-of-the-art software that allows us to test and compare multiple different methods. We have selected a range of methods to evaluate, including both traditional and cutting-edge techniques. This will provide valuable insights into the strengths and limitations of different approaches to NeRF generation.
+Our approach to generating NeRFs leverages state-of-the-art software that allows us to test and compare multiple different methods. We have selected a range of methods to evaluate, including traditional and cutting-edge techniques. This will provide valuable insights into the strengths and limitations of different approaches to NeRF generation.
 
-In the capture step, we will describe the process of acquiring the necessary data to train the NeRF model. This includes details of the equipment and techniques used to capture high-quality images of real-world scenes.
+In the capture step, we will describe the process of acquiring the necessary data to train the NeRF model. This includes details of the equipment and techniques used to capture high-quality images of real-world scenes. The process step involves preprocessing the captured data to prepare it for use in training the NeRF model. This includes tasks such as downscaling, feature extraction, and global adjustment of the input data. We will describe the specific methods and algorithms used for these tasks. The training step is where the NeRF model is actually learned from the processed data. In the rendering step, we will describe how the trained NeRF model is used to generate novel images of the scene. Finally, in the evaluating step, we will describe how we quantitatively and qualitatively assessed the quality of the generated NeRFs. Overall, this method chapter provides a description of the process of generating NeRFs, from data capture to evaluation.
 
-The process step involves preprocessing the captured data to prepare it for use in training the NeRF model. This includes tasks such as downscaling, feature extraction, and global adjustment of the input data. We will describe the specific methods and algorithms used for these tasks.
-
-The training step is where the NeRF model is actually learned from the processed data. %We will describe the specific neural network architecture and training algorithms used, as well as the hyperparameters that were applied. %We will also discuss any challenges or obstacles that we encountered during training, and how we addressed them.
-
-In the rendering step, we will describe how the trained NeRF model is used to generate novel images of the scene. This includes details of the rendering algorithms and techniques used.%, as well as any post-processing steps that were applied.
-
-Finally, in the evaluating step, we will describe how we quantitatively and qualitatively assessed the quality of the generated NeRFs. %This will include a discussion of the metrics and benchmarks used, as well as a comparison of the results to previous work in the field.
-
-Overall, this method chapter provides a comprehensive description of the process of generating NeRFs, from data capture to evaluation.
+%We will describe the specific neural network architecture and training algorithms used, as well as the hyperparameters that were applied. %We will also discuss any challenges or obstacles that we encountered during training, and how we addressed them. 
 
 \begin{comment}
 Describe the pipeline used to generate NeRFs
@@ -33,38 +25,30 @@ Describe the pipeline used to generate NeRFs
 \end{comment}
 
 \section{Nerfstudio}
-With the magnitude of different published methods regarding NeRF, some with corresponding source code and some not, it's not trivial to compare them on self-captured data. In the experiments, I have leveraged an open-source project named Nerfstudio. It is an API that streamlines the creation, training, and visualization of NeRFs. The components that make up NeRFs are modularized in a way that allows interpretable implementation of different NeRF methods. In addition, it ships with implemented versions of some of the most important published methods to date for real-world captures; NeRF, mip-NeRF, and instant-NGP.
+With the magnitude of different published methods regarding NeRF, some with corresponding source code and some not, it's not trivial to compare them on self-captured data. In the experiments, I have leveraged an open-source project named Nerfstudio. It is an API that streamlines the creation, training, and visualization of NeRFs. The components that make up NeRFs are modularized in a way that allows interpretable implementation of different NeRF methods. In addition, it ships with implemented versions of some of the most important published methods to date for real-world captures; NeRF, mip-NeRF, and instant-ngp.
 
 \section{Nerfacto}
 \input{figures/nerfacto-pipeline-overview.tex}
-Nerfstudio also provides its own method dubbed "Nerfacto". The method isn't published work, but leverages techniques from several other published methods which have proved to work well for real data captures. The techniques used in Nerfacto result in a method that strikes a great balance between quality and speed. Most of the techniques highlighted by Nerfacto have already been discussed in \autoref{chap:relatedwork}, but I'll recap and elaborate on a few here.
+Nerfstudio also provides its own method dubbed "Nerfacto". The method isn't published work, but leverages techniques from several other published methods which have proved to work well for real data captures. The techniques used in Nerfacto result in a method that strikes a great balance between quality and speed. The techniques highlighted by Nerfacto have already been discussed in \autoref{chap:relatedwork}, but I'll recap and elaborate on a few here.
 
 \textbf{Camera pose refinement}, as described in \autoref{sec:camera-pose-refinement} is a technique proposed to reduce the impact of imperfect camera poses. It's a very effective measure to reduce cloudy artifacts and increase the sharpness and overall quality of the resulting 3D representation.
 
 \textbf{Per image appearance conditioning}, as described in \autoref{sec:appearance-embeddings}, is a technique that allows the NeRF to process and represent 3D scenes with variable lighting, exposures, weather, and post-processing effects. In Nerfacto, the appearance embedding is a vector of size 32, which is concatenated with the viewing direction before it's passed through the MLP.
 
-\textbf{Hash encodings} were proposed in \cite{muller_instant_2022}. This parametric encoding differs in how spatial data is represented. In the original NeRF paper, the location \textbf{x} is represented by a positional encoding. With the multiresolution hash encoding, the location \textbf{x} is represented in a hash table by a linear interpolation of its closest vertices at multiple resolutions. This parametric encoding has several advantages in terms of computational effectiveness, resulting in several magnitudes of increased training and inference speed. Although you impose a larger memory cost by allocating several hash tables, the number of required parameter-updates per backpropagation is severely reduced. In Nerfacto, 16 hash tables with $2^{19}$ rows, each storing a feature vector of size 2, are allocated. The subsequent MLP has a very low capacity, with only one hidden layer containing 64 neurons. An overview of the multiresolution hash encoding can be seen in \autoref{fig:instant-ngp-hash-encoding}.
+\textbf{Hash encodings}, as described in \autoref{sec:instant-ngp}, is an effective encoding scheme used to severely decrease training- and inference time. In Nerfacto, 16 hash tables with $2^{19}$ rows, each storing a feature vector of size 2, are allocated. The subsequent MLP has a very low capacity, with only one hidden layer containing 64 neurons.
 
-%The only difference is essentially how spatial data is represented, i.e. parametric encoding. Instant-NGP encodes spatial data at multiple resolutions using hash tables, thereof the name multiresolution hash tables. During backpropagation, the MLP's weights and the feature vectors in the hash tables are both updated.
-%In a fully connected MLP, every weight and bias must be updated on back-propagation. With parametric encodings, only a very small number of feature vectors must be updated. Also, by reducing the size of the MLP, such parametric models can be trained to convergence much faster without sacrificing approximation quality. You trade a larger memory footprint by allocating hash tables, but in return you have to update a far lower number of trainable parameters per back-propagation, leading to an increased training and inference speed.
+\textbf{Proposal sampling}, as described in \autoref{sec:mipnerf360}, is a sampling technique used to increase the sampling density of areas that contribute most to the final render. Nerfacto extends the proposal sampler used in mip-NeRF 360 \cite{barronMipNeRF360Unbounded2022} by utilizing two density functions implemented as small fused-MLP with hash encodings \cite{muller_instant_2022}. This provides accurate and fast density estimations.
 
-\input{figures/instant-ngp-hash-encoding.tex}
-
-\textbf{Proposal sampling} is a sampling technique discussed in \autoref{sec:mipnerf360}. Nerfacto extends the proposal sampler used in mip-NeRF 360 by utilizing two density functions implemented as small fused-MLP with hash encodings \cite{muller_instant_2022}. This provides accurate and fast density estimations.
-
-\textbf{Scene contraction}, as described in \autoref{sec:mipnerf360}, is a technique proposed in \cite{barronMipNeRF360Unbounded2022} to extend mip-NeRF to support unbounded scenes.
+\textbf{Scene contraction}, as described in \autoref{sec:mipnerf360}, is a technique proposed in mip-NeRF 360 \cite{barronMipNeRF360Unbounded2022} to extend mip-NeRF to support unbounded scenes.
 
 \section{Capture}
-%- Video, image, polycam, etc. ✅
 The different datasets have primarily been captured with an iPhone 13 Pro Max. The iPhone features three lenses that enable captures ranging from ultra-wide to telephoto. Using the ultra-wide option has proved helpful in the pipelines where COLMAP has to be leveraged as it captures more of the scene and more easily enables overlap between the frames. The resulting NeRF-renderings haven't seemed distorted. When capturing video or images for a NeRF it's important that the scene is well-lit, that you capture non-blurry images, and that there are no transient objects present.
 
 Polycam is a "LiDAR \& 3D Scanner for iPhone \& Android". It has multiple settings for performing photogrammetry and LiDAR scans, but most importantly it enables export of images with corresponding camera poses. This is very useful as Nerfstudio has created an integration that reads the camera poses generated by Polycam and transforms it into Nerfstudio's data format. This enables skipping COLMAP entirely from the pipeline. Polycam doesn't support wide camera options, resulting in the need to manually record more of the scene.
 %The quality of the camera poses are relatively good.
 
 \section{Process}
-%- COLMAP, or direct extraction from e.g. Polycam 
-%- Configuration of COLMAP
-The data processing step for constructing a NeRF are usually the same across different models. It's a step for creating the dataset of images with corresponding camera poses and is comprised of creating a set of images from a video, scaling the images to a preferred size, and lastly utilizing an algorithm to extract the corresponding camera poses. If you a priori have access to the input images and refined camera poses, as is the case with the Polycam-integration, there's not much pre-processing necessary. All the experiments in this paper leverage Nerfstudio which has its own data processing pipeline API that includes support for video, images, and Polycam-data. For video input, FFMPEG\cite{tomar2006converting} is first used to grab image frames from the video at specified densities, by default ~300 frames. When a set of images is acquired, the images are scaled down in fractions of the original image size. The scaling of the images is done as it's been obeserved that training on images larger than 1600px along the longest dimension has diminishing returns. COLMAP is then used for extracting the camera poses from the set of input images. The choice of matching algorithm, as discussed in \autoref{sec:sfm}, is primarily the only setting you have to tweak for COLMAP.
+The data processing step for constructing a NeRF are usually the same across different models. It's a step for creating the dataset of images with corresponding camera poses and is comprised of creating a set of images from a video, scaling the images to a preferred size, and lastly utilizing an algorithm to extract the corresponding camera poses. If you a priori have access to the input images and refined camera poses, as is the case with the Polycam-integration, there's not much pre-processing necessary. All the experiments in this paper leverage Nerfstudio which has its own data processing pipeline API that includes support for video, images, and Polycam-data. For video input, FFMPEG \cite{tomar2006converting} is first used to grab image frames from the video at specified densities, by default ~300 frames. When a set of images is acquired, the images are scaled down in fractions of the original image size. The scaling of the images is done as it's been obeserved that training on images larger than 1600px along the longest dimension has diminishing returns. COLMAP is then used for extracting the camera poses from the set of input images. The choice of matching algorithm, as discussed in \autoref{sec:sfm}, is primarily the only setting you have to tweak for COLMAP.
 
 \begin{lstlisting}[
     caption={Example of running Nerfstudio's process-script. Reference the \href{https://docs.nerf.studio/en/latest/index.html}{documentation} for details.},
@@ -140,6 +124,7 @@ The dataset used throughout this report is primarily self-captured data. It cont
 \input{figures/ohma-electra.tex}
 \input{figures/tier.tex}
 \input{figures/streetview-dataset.tex}
-\input{figures/octahedron-dataset.tex}
+%\input{figures/octahedron-dataset.tex}
 \input{figures/lego-dataset.tex}
+\input{figures/trex-dataset.tex}
 \input{figures/fox-dataset.tex}

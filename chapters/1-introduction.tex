@@ -1,17 +1,7 @@
 \chapter{Introduction}
 
-The advance in Neural Radiance Fields (NeRFs) proposes a new method for reconstructing 3D scenes from 2D images.
-
-By leveraging NeRFs we can create a pipeline that efficiently reconstructs 3D scenes. The reconstructed scenes have many applications, and could be beneficial in applications that require simulated virtual worlds.
-
-This thesis explores how we can leverage NeRFs to reconstruct realistic 3D scenes from 2D images. Further, it will examine the limits of NeRFs and see how the capacity can affect how large scenes can be reconstructed.
-
-% and modify an open-source large-scale NeRF pipeline to create a virtual environment of parts of Trondheim.
-%Research questions:
-
-
+\begin{comment}    
 1.1 Motivation
-
 
 1.2 Goal and research questions
 The overall goal of this research is ...
@@ -20,3 +10,54 @@ RQ1, RQ2, ...
 - Eksperimenter
 
 1.3 Thesis outline
+\end{comment}
+
+% and modify an open-source large-scale NeRF pipeline to create a virtual environment of parts of Trondheim.
+%The advance in Neural Radiance Fields (NeRFs) proposes a new method for reconstructing 3D scenes from 2D images.
+%By leveraging NeRFs we can create a pipeline that efficiently reconstructs 3D scenes. The reconstructed scenes have many applications, and could be beneficial in applications that require simulated virtual worlds.
+
+\section{Motivation}
+The use of Neural Radiance Fields (NeRFs) for novel view synthesis and 3D reconstruction has gained increasing attention in recent years due to its impressive performance. As a result, there has been a surge of research in this area, with many new methods and techniques being proposed and explored. In order to understand the potential of NeRF it is useful to study and evaluate some of the most well-established NeRF-based methods and techniques. By conducting experiments and analyzing the results, we can gain insights into the potential of NeRFs, as well as the challenges and limitations of using these methods.
+
+\section{Goal and research questions}
+The goal of this report is to investigate the potential of using Neural Radiance Fields (NeRFs) to reconstruct realistic 3D scenes from 2D imagery. Specifically, it aims to determine which methods are most effective for different applications, and how different techniques impact performance. This research will provide insights into the capabilities and limitations of NeRFs for synthesizing 3D scenes, as well as potential directions for future work in this area.
+
+%The goal of this report is to explore how we can leverage NeRFs to reconstruct realistic 3D scenes from 2D imagery, what methods work well for certain applications and how different techniques betters/worsens performance
+%This thesis explores how we can leverage NeRFs to reconstruct realistic 3D scenes from 2D images. Further, it will examine the limits of NeRFs and see how the capacity can affect how large scenes can be reconstructed.
+
+\begin{description}[leftmargin=!,labelwidth=\widthof{RQ 1:}]
+\item[\textbf{RQ 1:}]
+How do the different NeRF methods (NeRF, mip-NeRF, instant-ngp, Nerfacto) perform on unbounded, bounded, real, and Blender scenes in terms of reconstruction quality and computational efficiency?
+\item[\textbf{RQ 2:}]
+What is the effect of increasing the number of input images on the performance and quality of NeRF methods, and how does the increased input size affect the pre-processing step?
+\item[\textbf{RQ 3:}]
+How do different capture methods compare, and are camera poses computed via LiDAR data better than SfM-methods such as COLMAP, in terms of quality and computational efficiency?
+%How do the capture methods COLMAP and Polycam compare in terms of quality and computational efficiency for reconstructing 3D scenes from 2D imagery?
+\item[\textbf{RQ 4:}]
+What is the potential of using NeRFs in Virtual Reality applications?
+\end{description}
+
+
+\section{Report structure}
+
+\begin{description}[leftmargin=!,labelwidth=\widthof{Chapter 1:}]
+\item[\textbf{Chapter 1 - Introduction:}]
+Presents the motivation, goal, and research questions for the study.
+
+\item[\textbf{Chapter 2 - Background:}]
+Provides an overview of preliminary methods, techniques, tools, and metrics in order to establish a common ground for later chapters.
+
+\item[\textbf{Chapter 3 - Method:}]
+Describes the pipeline used for exploring different NeRF-based methods, including capturing, processing, training, rendering, and evaluating NeRFs. The datasets used for the experiments are also described.
+
+\item[\textbf{Chapter 4 - Results:}]
+Presents the results of the experiments, including the impact of different methods and dataset size on the quality of NeRFs.
+
+\item[\textbf{Chapter 5 - Discussion:}]
+Explores the implications of the results and discusses the limitations and challenges of using NeRFs for synthesizing novel views.
+
+\item[\textbf{Chapter 6 - Conclusion \& Future Work:}]
+Summarizes the main findings of the study and further suggests a direction for future work.
+\end{description}
+
+

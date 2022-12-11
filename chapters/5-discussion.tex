@@ -1,7 +1,3 @@
-\chapter{Discussion}
-
-In this discussion chapter, we will present and analyze the results of our experiments in the previous chapter on dataset size, different methods, capture method, and NeRF in VR. We will first discuss the impact of dataset size on the performance of our algorithms and compare the results obtained with different methods. We will then analyze the effects of the capture method on the quality of the reconstructed 3D scenes, and finally, we will explore the potential of NeRF in VR applications. Our goal is to provide insight into the factors that influence the performance of our algorithms and to identify potential areas for future research.
-
 \begin{comment}
 - Loop back to the introduction, review - claim - agenda
     - In this thesis, we have seen how we can reconstruct 3D scenes and render novel views by optimizing NeRFs on 2D input images.
@@ -17,7 +13,34 @@ Results:
 - Area size
 \end{comment}
 
+\chapter{Discussion}
+In this chapter, we will analyze the results of our experiments in relation to the research questions posed in the Introduction. By discussing the implications of our findings, we aim to provide further insights into the capabilities and limitations of NeRFs.
+
+
+\section{Different methods}
+\begin{description}[leftmargin=!,labelwidth=\widthof{RQ 1:}]
+\item[\textbf{RQ 1:}]
+How do the different NeRF methods (NeRF, mip-NeRF, instant-ngp, Nerfacto) perform on unbounded, bounded, real, and Blender scenes in terms of reconstruction quality and computational efficiency?
+\end{description}
+
+\subsection{Unbounded scene}
+Both instant-ngp and Nerfacto perform very well on the unbounded scene. 
+
+\subsection{Blender scene (bounded)}
+The "slow" methods, NeRF and mip-NeRF, both produce very good results when trained on the Blender dataset. It is a bounded scene constrained to a single scale. It's not surprising that they score the same across all metrics.
+
+The two "fast" methods, Nerfacto and instant-ngp, are more unequal to each other though. While instant-ngp scores very high on all metrics, Nerfacto needs some adjustment in order to score decent. The Nerfacto model was not designed with blender scenes in mind, and therefore it may not perform well on such scenes. The artifacts in the reconstructed 3D scenes may be due to the scene contraction and sampling strategies used by the model, which are optimized for unbounded scenes. Additionally, the inclusion of appearance conditioning in the model may lead to overfitting, since this feature is intended to handle changes in exposure that do not occur in blender scenes. These factors may contribute to the poor performance of the Nerfacto model on blender scenes.
+
+\subsection{Forward-facing scene}
+
+
+
 \section{Dataset size}
+\begin{description}[leftmargin=!,labelwidth=\widthof{RQ 1:}]
+\item[\textbf{RQ 2:}]
+What is the effect of increasing the number of input images on the performance and quality of NeRF methods, and how does the increased input size affect the pre-processing step?
+\end{description}
+
 As discussed in \autoref{sec:colmap}, COLMAP has several different feature matching algorithms, e.g. exhaustive, sequential, and vocabulary tree matching. The choice of a matching algorithm should depend on the type of capture, e.g. if the source of the sampled images is a video it entails that subsequent frames have a certain overlap and makes sequential matching a sensible choice. The time complexity of COLMAP and its matching algorithms is important as the dataset size increases, as it might consume a lot of the time in the overall process-train-render pipeline. An overview of the selected matching algorithms' complexities can be seen in \autoref{tab:colmap-feature-complexity}.
 
 The results in \autoref{tab:colmap-dataset-size} present data on the performance of COLMAP when using different numbers of input images. As the percentage of frames increases, there is a noticeable improvement in the PSNR, and SSIM scores. For example, when using 20\% of the frames, the PSNR is 19.692 and the SSIM is 0.523. However, when using 50\% of the frames, the PSNR increases to 21.103 and the SSIM increases to 0.590. These improvements suggest that using a larger number of input images can enhance the performance of COLMAP.
@@ -26,23 +49,33 @@ In addition to the improved performance, there is also a noticeable increase in 
 
 The LPIPS scores remain relatively constant across different percentages of input images. The reason for this is not clear. The LPIPS metric measures the perceptual distance between two images, so it is possible that the images used in the study had similar content, which could explain the relatively constant LPIPS scores. It is also possible that the LPIPS scores were not significantly affected by the changes in the number of input images, but further analysis would be needed to confirm this.
 
-\section{Different methods}
-The Nerfacto model was not designed with blender scenes in mind, and therefore it may not perform well on such scenes. The artifacts in the reconstructed 3D scenes may be due to the scene contraction and sampling strategies used by the model, which are optimized for unbounded scenes. Additionally, the inclusion of appearance conditioning in the model may lead to overfitting, since this feature is intended to handle changes in exposure that do not occur in blender scenes. These factors may contribute to the poor performance of the Nerfacto model on blender scenes.
+
+
 
 \section{Polycam vs. COLMAP}
+\begin{description}[leftmargin=!,labelwidth=\widthof{RQ 1:}]
+\item[\textbf{RQ 3:}]
+How do different capture methods compare, and are camera poses computed via LiDAR data better than SfM-methods such as COLMAP, in terms of quality and computational efficiency?
+\end{description}
+
 %From the results, Polycam achieves better score across all metrics at ~3 magnitudes the speed. It seems as if it's the obvious choice when choosing capture modality. Although this is impressive, Polycam comes with a couple of limitations. We have to keep in mind that COLMAP is run on the images captured and exported from Polycam. These images are at a lower resolution and have a lower field of view than what could've been captured without the application. If the same scene was captured with a wide lens and in high resolution, as has been done for multiple of the other experiments, COLMAP might've shown better results.
 
-From the results shown in the \autoref{tab:colmap-polycam-comparison}, it is clear that Polycam outperforms COLMAP on all metrics, including PSNR, SSIM, and LPIPS. Additionally, Polycam is significantly faster than COLMAP, with a processing time of only 00:11 minutes compared to 154:33 minutes for COLMAP. These results suggest that Polycam is a superior method for capturing data, as it is able to produce higher-quality results at a much faster speed.
+From the results shown in the \autoref{tab:colmap-polycam-comparison}, it is clear that Polycam outperforms COLMAP on all metrics, including PSNR, SSIM, and LPIPS. Additionally, Polycam is significantly faster than COLMAP, with a processing time of only 07:11 minutes compared to 02:34:33 hours for COLMAP. These results suggest that Polycam is a superior method for capturing data, as it is able to produce higher-quality results at a much faster speed.
 
 However, it is important to note that COLMAP is run on the images captured and exported from Polycam, which may have lower resolution and a smaller field of view than what could be captured without using Polycam. If the same scene was captured with a wider lens and in higher resolution, it is possible that COLMAP might have shown better results. Despite this limitation, the superior performance of Polycam on the metrics evaluated in this study makes it an attractive option for data capture.
 
-\section{NeRF in VR}
-The use of immersive-ngp's Unity-plugin to bring NeRFs into extended reality (XR) applications has shown some interesting results. By importing trained NeRFs into VR, users can explore virtual environments in a more realistic and engaging way. However, it can be a bit challenging to get the plugin up and running, and the process is relatively hardware-intensive. Additionally, in order to utilize the software, a relatively new VR headset is required.
-
-Despite these challenges, the ability to use NeRFs in XR applications has the potential to enable the creation of more realistic and immersive virtual experiences. However, further work is needed to improve the performance and accessibility of this technology in order to fully realize its potential.
-
-
-\section{Issues with COLMAP}
+\subsection{Challenges with COLMAP}
 One of the main challenges with using COLMAP is that it relies on a high degree of overlap between the images, which can be difficult to achieve in practice. Additionally, all of the images used for reconstruction should have approximately the same appearance, which can be difficult to guarantee in real-world scenarios where lighting and other factors may vary. Changes in lighting, weather, and other factors can vary significantly from one day to the next, which can affect the appearance of the images. For example, a scene that is captured on a sunny day may look very different from the same scene captured on a cloudy day. As a result, it can be difficult to ensure that the images used for reconstruction have the same appearance, which can affect the accuracy of the reconstructed scene.
 
 Additionally, the requirement for images to have the same appearance can also make it challenging to capture a scene that includes moving objects, such as people or vehicles. This is because the appearance of the scene may change over time as the moving objects move through the scene. In these cases, it may be necessary to capture multiple images at different times in order to ensure that the images have the same appearance, which can be time-consuming and challenging. Overall, the requirement for images to have the same appearance when using COLMAP can be a significant limitation in certain situations.
+
+
+\section{NeRF in VR}
+\begin{description}[leftmargin=!,labelwidth=\widthof{RQ 1:}]
+\item[\textbf{RQ 4:}]
+What is the potential of using NeRFs in Virtual Reality applications?
+\end{description}
+
+The use of immersive-ngp's Unity-plugin to bring NeRFs into extended reality (XR) applications has shown some interesting results. By importing trained NeRFs into VR, users can explore virtual environments in a more realistic and engaging way. However, it can be a bit challenging to get the plugin up and running, and the process is relatively hardware-intensive. Additionally, in order to utilize the software, a relatively new VR headset is required.
+
+Despite these challenges, the ability to use NeRFs in XR applications has the potential to enable the creation of more realistic and immersive virtual experiences. However, further work is needed to improve the performance and accessibility of this technology in order to fully realize its potential.
