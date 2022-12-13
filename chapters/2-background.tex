@@ -37,17 +37,19 @@ Alpha compositing is the process of combining one image with a background to cre
 
 % --------------------- Neural Fields ---------------------
 \section{Neural Fields} % All text is taken from \cite{xie_neural_2022} - rewrite - have now paraphrased it
-A field that has been entirely or partially parameterized by a neural network is known as a neural field. The field is a quantity that may be defined for any set of temporal or spatial coordinates. By design, neural fields are both continuous and adaptable. The parameterization of neural fields as MLPs with gradient-defined activation functions is common\cite{xie_neural_2022}.
+A field that has been entirely or partially parameterized by a neural network is known as a neural field. The field is a quantity that may be defined for any set of temporal or spatial coordinates. By design, neural fields are both continuous and adaptable. Neural fields are commonly parameterized as MLPs with gradient-defined activation functions. \cite{xie_neural_2022}.
 
-A typical neural fields algorithm in visual computing would first, across space-time, sample coordinates and feed them into a neural network to produce field quantities. The field quantities are samples from the desired reconstruction domain of our problem. Then, we apply a forward map to relate the reconstruction to the sensor domain (e.g. RGB image), where supervision is available. Finally, we calculate the reconstruction error or loss that guides the neural network optimization process by comparing the reconstructed signal to the sensor measurement.
+A typical neural fields algorithm in visual computing would first, across space-time, sample coordinates and feed them into a neural network to produce field quantities. The field quantities are samples from the desired reconstruction domain of our problem. Then, we apply a forward map to relate the reconstruction to the sensor domain (e.g. RGB image), where supervision is available. Finally, we calculate the reconstruction error or loss that guides the neural network optimization process by comparing the reconstructed signal to the sensor measurement. An example of this is shown in \autoref{fig:neural-field}.
+
+\input{figures/neural-field.tex}
 
 
 
 % --------------------- Neural Radiance Fields (NeRFs) ---------------------
-\section{Neural Radiance Fields (NeRFs)}
+\subsection{Neural Radiance Fields (NeRFs)}
 Most of the volumetric data we interact with through computer games, movies, and other computer graphic applications, are represented by meshes. A mesh is a collection of vertices, edges, and faces that can be combined in order to define the shape of objects. Meshes are easy to manipulate and interact with. Another common representation of volume is voxels, where a 3D point in space is represented by a value, e.g. a color. Both of these modeling techniques are explicit representations. As we want to increase the resolution of a scene, we have to model increasingly smaller regions of space, i.e. increase the number of voxels/triangle-meshes in the volume. This doesn't scale well as the memory requirements increase as we increase the number of voxels/triangle-meshes. We have to find another way to represent the scene, instead of representing it as explicit blocks in space. NeRF provides an implicit representation of the scene by utilizing a multi-layered perceptron (MLP).
 
-NeRF is a neural volumetric representation. The name, neural radiance fields, gives us a clue as to what it is. It is a field, a space full of particles, where each particle has a given radiance, a color emitted by the particle in a certain direction, and the field is represented with a neural network. NeRF parameterizes 3D scenes as 3D neural fields, mapping 3D coordinates to radiance and density. The 3D scene can subsequently be rendered via volume rendering \autoref{sec:volumerendering}.
+NeRF is a neural volumetric representation. The name, neural radiance fields, gives us a clue as to what it is. It is a field, a space full of particles, where each particle has a given radiance, a color emitted by the particle in a certain direction, and the field is represented with a neural network. NeRF parameterizes 3D scenes as 3D neural fields, mapping 3D coordinates to radiance and density. The 3D scene can subsequently be rendered via volume rendering, as discussed in \autoref{sec:volumerendering}.
 
 \subsection{Differentiable rendering} % Change this - a lot directly from the paper
 NeRFs are made possible due to differentiable rendering, a major breakthrough in 3D reconstruction. It allows reconstruction of 3D neural fields representing shape and/or appearance given only 2D images, instead of 3D supervision. Differentiable rendering has significant implications as 3D often is expensive to obtain, while 2D images are omni-present. Suddenly, non-experts can become 3D content creators, without the barrier of specialized hardware; an important social implication\cite{xieNeuralFieldsVisual2022}.
@@ -113,91 +115,6 @@ Stratified sampling is a sampling method. It has proven benefits in machine lear
 \end{itemize}
 
 \input{figures/stratified-sampling.tex}
-
-
-
-
-
-% --------------------- Other models that Nerfacto builds on ---------------------
-% --------------------- mip-NeRF ---------------------
-\section{Mip-NeRF: A Multiscale Representation for Anti-Aliasing Neural Radiance Fields} \label{sec:mipnerf}
-NeRF shows good performance when all training and testing photos are taken at about the same distance from the scene, and it doesn't have to reason about scale or aliasing. When you add more cameras, pulled away from the scene, NeRF starts to break down, because it's a single-scale model now trying to solve a multi-scale problem. Renderings from the NeRF will show aliasing artifacts in distant views and excessive blur in close-up views.
-
-A solution to this problem would be to adapt a solution that is used in offline ray tracing, supersampling. With supersampling, we would march multiple rays through the same pixel's footprint. This technique doesn't solve the issue of aliasing effects, but the rendered image would look better. However, doing so would be very computationally expensive and it would increase the already very long training times of NeRF, which already depends on querying an underlying MLP hundreds of times for a single ray.
-
-Another sampling strategy apart from casting rays through each pixels' footprint would be to cast a cone, as seen in \autoref{fig:mip-nerf-frustums}. The cone's radius is determined by the size of the pixel's footprint on the image plane, so that the cone models the whole volume of space visible by the pixel. When the pixel's cone is rendered, all the content within that visible volume will be averaged out, instead of rendering out whatever intersects with the infinitely narrow ray that was cast by NeRF. The cone is divided into conical frustums. The frustums are approximated with a multivariate Gaussian since they're easier to manipulate and have a closed-form solution.
-
-\input{figures/mip-nerf-frustums.tex}
-
-Instead of positionally encoding a single point along the ray, we compute the expected positional encoding with respect to the Gaussian that we've constructed. With this encoding, mip-NeRF is able to reason about the scale of its input by looking at the scale of the encodings. This lets the model understand the difference between small and large volumes. This encoding scheme is called integrated positional encoding (IPE), and has a simple closed-form that can be computed quickly.
-
-Inspiration to this method is taken from mipmapping which traditionally has been used to prevent aliasing in computer graphics pipelines. A mipmap is a pre-filtered set of discretely downsampled signals, very often images, which helps speed up rendering as the responsibility of anti-aliasing is shifted to a precomputation phase. Mip-NeRF extends NeRF to simultaneously represent the pre-filtered radiance field for a continuous space of scales, thereof "mip-NeRF".
-
-An overview of the mip-NeRF pipeline can be seen in \autoref{fig:mip-nerf-pipeline-overview}. The main difference from the NeRF-pipeline as portrayed in \autoref{fig:nerf-pipeline} is the mip-NeRF field that now employ the Integrated Positional Encoding.
-
-\input{figures/mip-nerf-pipeline-overview.tex}
-
-
-
-% --------------------- mip-NeRF 360 ---------------------
-\section{Mip-NeRF 360: Unbounded Anti-Aliased Neural Radiance Fields} \label{sec:mipnerf360}
-Mip-NeRF provides a lot of helpful techniques in order to proceed with the evolution of NeRFs, but it focuses on forward-facing scenes instead of unbounded scenes; scenes with a main object of interest in front of an elaborate background. This is where Mip-NeRF 360 picks up, it addresses challenges with extending mip-NeRF to unbounded scenes. There are primarily three techniques proposed by Mip-NeRF 360 which we'll cover in this section.
-
-\textbf{Representation}:
-%Problem: Unbounded scenes are large, but mip-NeF needs a bounded domain
-%Solution: Apply a Kalman-like warp to mip-NeRF Gaussians to warp the mip-NeRF into non-Euclidean space.
-The first challenge with extending mip-NeRF to unbounded scenes is that unbounded scenes are large, but mip-NeRF requires a bounded domain. Mip-NeRF handles scenes unbounded in one direction by warping the space into projective space, normalized device coordinates (NDC), but the challenge arises when the scene is unbounded in all directions. A solution is to apply a Kalman-like warp to mip-NeRF Gaussians in order to warp the mip-NeRF into non-Euclidean space. All the Gaussians outside a sphere of radius one will smoothly be warped into a non-euclidean space within a sphere of radius two. This non-Euclidean space is used to represent the input to the MLP. 
-
-
-\textbf{Efficiency:}
-%Problem: Large scenes require more network capacity, but using a large MLP is too expensive (given that you have to query it hundred of times for a single ray)
-%Solution: "Distill" scene geometry from a large NeRF MLP into a small MLP while training. Train a small proposal MLP to bound the geometry predicted by a large NeRF MLP which makes training ~3 times faster
-Extending a bounded scene to an unbounded scene will lead to larger scenes. These scenes require more network capacity, but using a large MLP is too expensive given that you have to query it hundreds of times for a single ray. A solution is to distill scene geometry from a large NeRF MLP into a small \textit{proposal MLP} while training. The proposal MLP will only output a set of weights, no colors. By feeding a set of location points through the proposal MLP, the outputted weights can then be used as a PDF to resample the ray, the same way the coarse network in hierarchical sampling guides the fine network's sampling. The resampled points are then used to render a color, which as normal is supervised with photometric loss. Instead of supervising the proposal MLP to accurately reconstruct the image, which is done for both the coarse and fine MLPs in mip-NeRF, we supervise its output weights to be consistent with the output weights from the NeRF MLP. We do this with a loss function that encourages the outputted weight histograms, which have different bin endpoints, to be consistent with one another. This is possible due to some strong assertions on the relation between the two distributions, summarizing the same underlying, true distribution. This new approach to training accelerates training by 300\%.
-
-%i.e. calculate a loss that correlates the output weights from the NeRF MLP and the proposal MLP. Due to this we can have a very small proposal MLP which we query very frequently, and a larger NeRF MLP which is queried relatively few times.
-%To make this work we need a loss function that encourages histograms with different bin endpoints to be consistent with one another. To achieve this we make some strong assertions on the relation between the two distributions, summarizing the same underlying, true distribution. The loss function will penalize any excess mass that violates the upper bound imposed on the proposal MLP.
-
-
-\textbf{Ambiguity:}
-%Problem: 3D reconstruction becomes more ambigious as you increase the scene size. Results in more artifacts
-%Solution: Utilize a novel regularizer designed specifically for mip-NeRF ray intervals. The regularizer encourages each ray's histogram to be as close to a delta function as possible. 
-Reconstructing 3D content from 2D photos is inherently ambiguous since the content of unbounded scenes can be everywhere and will only be seen by a tiny number of rays. This problem increase as you increase the scene size. The original NeRF-paper partially addressed this behavior by introducing random Gaussian noise to the output $\sigma$ values, before passing them through the ReLU. It stimulated densities to drift toward either zero or infinity, which slightly enhanced visual performance. This regularization isn't sufficient for the more challenging task mip-NeRF 360 seeks to tackle. Instead, they utilize a novel regularizer, designed specifically for mip-NeRF ray intervals, that encourages each ray's histogram to be as close to a delta function as possible. This regularizer reduces the occurences of "floaters", semi-transparent material floating in space.
-
-
-
-\section{Block NeRF: Scalable Large Scene Neural View Synthesis}
-Block NeRF is a paper that demonstrates a method for large-scale reconstruction of scenes using NeRFs. It does this by splitting large areas into multiple blocks of a certain radius, where each block has a connected NeRF, dubbed a block-NeRF. The different block-NeRFs are trained on images within their radius of responsibility. At inference time, only the block-NeRFs with a radius that spans the requested location are kept. These are all trained on image data from the requested location and can render an output. Some of the remaining block-NeRFs might still be without a direct line of sight to the requested location, which results in low "visibility". These block-NeRFs are also filtered out, resulting in a pool of block-NeRFs with good visibility. The color outputs of the remaining block-NeRFs are merged to render the final image output.
-
-Block NeRF leverages multiple techniques in order to enable the reconstruction of large scenes.
-
-\subsection{Appearance embeddings} \label{sec:appearance-embeddings}
-Per image appearance conditioning is a technique proposed for NeRFs in NeRF-W \cite{martin-brualla_nerf_2021} and later used in multiple implementations. The appearance embeddings help reduce artifacts from the scene, especially "ghosting" artifacts which present themselves as fog in the final render. The appearance embedding is a vector in a low-dimensional space, unique for every input image, that is optimized jointly with the NeRF in order to allow the NeRF to process and represent 3D scenes with variable lighting, exposures, weather, and post-processing effects. In order to accommodate for these variations, we condition the final part of the MLP by passing the viewing direction concatenated with the appearance embedding. 
-%The appearance embedding is concatenated with the viewing direction and passed through an MLP 
-
-\subsection{Learned pose refinement} \label{sec:camera-pose-refinement}
-Camera pose refinement is a technique proposed for NeRFs on forward-facing scenes in \textit{NeRF--} \cite{wang_nerf--_2022}. It has later been built upon to support imperfect camera poses for full 3D scene representations in \textit{BaRF} \cite{lin_barf_2021}. Block-NeRF leverages pose refinement on large unbounded scenes. It is a technique proposed to reduce the impact of imperfect camera poses. In NeRF, this can be done by treating the camera poses and intrinsics as learnable parameters and jointly optimizing them with the 3D scene representation, i.e. optimizing both the photometric loss and the corresponding camera poses. Pose refinement is a very effective measure to reduce cloudy artifacts and increase the sharpness and overall quality of the resulting 3D representation.
-
-An overview of the mip-NeRF 360 pipeline can be seen in \autoref{fig:mip-nerf-360-pipeline-overview}. Note that the pipeline has a number of differences from the previous mip-NeRF pipeline portrayed in \autoref{fig:mip-nerf-pipeline-overview}. There is no redundant RGB-value being rendered and there are two different fields; one density field and one mip-NeRF field.
-
-\input{figures/mip-nerf-360-pipeline-overview.tex}
-
-\subsection{Visibility prediction}
-Visibility prediction is done in order to predict if a given point is within the line of sight of a specific block-NeRF. The prediction is done by a secondary MLP $F_v$ that is trained to learn an approximation of the visibility of a sampled point. Given a location and a viewing direction, $F_v$ outputs an approximation of that location's transmittance ($T$ in \autoref{eq:volume-rendering}). The transmittance of a location will be close to 1 if it's visible, i.e. located in free space or on the surface of the first intersected object. Objects inside or behind the first intersected object will have a transmittance close to 0. If the point is seen from multiple viewing directions, the resulting transmittance will be the average of these observations. $F_v$ is supervised by the block-NeRF's main MLP $F_\sigma$.
-
-
-
-% --------------------- Instant-ngp ---------------------
-\section{Instant-ngp: Instant Neural Graphics Primitives with a Multiresolution Hash Encoding} \label{sec:instant-ngp}
-Instant-ngp \cite{muller_instant_2022} is a paper that presents a method for speeding up the training- and inference of NeRFs. Previous NeRF methods have required hours or even days of training in order to learn a scene, but the team at Nvidia was able to significantly reduce both the training- and inference time while maintaining the same level of quality. This achievement represented a significant advancement in the field of NeRFs, and has greatly improved the efficiency and effectiveness of NeRF-based applications.
-
-The main technique proposed by instant-NeRF is a new parametric encoding for the scene's spatial data, coined \textit{Multi-resolution hash encoding}. In the original NeRF paper, the location \textbf{x} is represented by a positional encoding as described in \autoref{sec:positionalencoding}. With the multiresolution hash encoding, the location \textbf{x} is represented in a hash table by a linear interpolation of its closest vertices at multiple resolutions. This parametric encoding has several advantages in terms of computational effectiveness, resulting in several magnitudes of increased training and inference speed. Although you impose a larger memory cost by allocating several hash tables, the number of required parameter-updates per backpropagation is severely reduced. An overview of the multiresolution hash encoding can be seen in \autoref{fig:instant-ngp-hash-encoding}.
-
-\input{figures/instant-ngp-hash-encoding.tex}
-
-%The only difference is essentially how spatial data is represented, i.e. parametric encoding. Instant-NGP encodes spatial data at multiple resolutions using hash tables, thereof the name multiresolution hash tables. During backpropagation, the MLP's weights and the feature vectors in the hash tables are both updated.
-%In a fully connected MLP, every weight and bias must be updated on back-propagation. With parametric encodings, only a very small number of feature vectors must be updated. Also, by reducing the size of the MLP, such parametric models can be trained to convergence much faster without sacrificing approximation quality. You trade a larger memory footprint by allocating hash tables, but in return you have to update a far lower number of trainable parameters per back-propagation, leading to an increased training and inference speed.
-
-
 
 
 % --------------------- Structure from motion ---------------------
@@ -276,3 +193,83 @@ LPIPS \cite{zhang_unreasonable_2018} is a perceptual similarity metric based on 
 
 %The metric determines how similar two image patches' activations are, for a given network. It's been demonstrated that this metric closely matches human perception. Image patches with a low LPIPS score are perceptually similar.
 
+
+\section{Related Work}
+% --------------------- Other models that Nerfacto builds on ---------------------
+% --------------------- mip-NeRF ---------------------
+\subsection{Mip-NeRF: A Multiscale Representation for Anti-Aliasing Neural Radiance Fields} \label{sec:mipnerf}
+NeRF shows good performance when all training and testing photos are taken at about the same distance from the scene, and it doesn't have to reason about scale or aliasing. When you add more cameras, pulled away from the scene, NeRF starts to break down, because it's a single-scale model now trying to solve a multi-scale problem. Renderings from the NeRF will show aliasing artifacts in distant views and excessive blur in close-up views.
+
+A solution to this problem would be to adapt a solution that is used in offline ray tracing, supersampling. With supersampling, we would march multiple rays through the same pixel's footprint. This technique doesn't solve the issue of aliasing effects, but the rendered image would look better. However, doing so would be very computationally expensive and it would increase the already very long training times of NeRF, which already depends on querying an underlying MLP hundreds of times for a single ray.
+
+Another sampling strategy apart from casting rays through each pixels' footprint would be to cast a cone, as seen in \autoref{fig:mip-nerf-frustums}. The cone's radius is determined by the size of the pixel's footprint on the image plane, so that the cone models the whole volume of space visible by the pixel. When the pixel's cone is rendered, all the content within that visible volume will be averaged out, instead of rendering out whatever intersects with the infinitely narrow ray that was cast by NeRF. The cone is divided into conical frustums. The frustums are approximated with a multivariate Gaussian since they're easier to manipulate and have a closed-form solution.
+
+\input{figures/mip-nerf-frustums.tex}
+
+Instead of positionally encoding a single point along the ray, we compute the expected positional encoding with respect to the Gaussian that we've constructed. With this encoding, mip-NeRF is able to reason about the scale of its input by looking at the scale of the encodings. This lets the model understand the difference between small and large volumes. This encoding scheme is called integrated positional encoding (IPE), and has a simple closed-form that can be computed quickly.
+
+Inspiration to this method is taken from mipmapping which traditionally has been used to prevent aliasing in computer graphics pipelines. A mipmap is a pre-filtered set of discretely downsampled signals, very often images, which helps speed up rendering as the responsibility of anti-aliasing is shifted to a precomputation phase. Mip-NeRF extends NeRF to simultaneously represent the pre-filtered radiance field for a continuous space of scales, thereof "mip-NeRF".
+
+An overview of the mip-NeRF pipeline can be seen in \autoref{fig:mip-nerf-pipeline-overview}. The main difference from the NeRF-pipeline as portrayed in \autoref{fig:nerf-pipeline} is the mip-NeRF field that now employ the Integrated Positional Encoding.
+
+\input{figures/mip-nerf-pipeline-overview.tex}
+
+
+
+% --------------------- mip-NeRF 360 ---------------------
+\subsection{Mip-NeRF 360: Unbounded Anti-Aliased Neural Radiance Fields} \label{sec:mipnerf360}
+Mip-NeRF provides a lot of helpful techniques in order to proceed with the evolution of NeRFs, but it focuses on forward-facing scenes instead of unbounded scenes; scenes with a main object of interest in front of an elaborate background. This is where Mip-NeRF 360 picks up, it addresses challenges with extending mip-NeRF to unbounded scenes. There are primarily three techniques proposed by Mip-NeRF 360 which we'll cover in this section.
+
+\textbf{Representation}:
+%Problem: Unbounded scenes are large, but mip-NeF needs a bounded domain
+%Solution: Apply a Kalman-like warp to mip-NeRF Gaussians to warp the mip-NeRF into non-Euclidean space.
+The first challenge with extending mip-NeRF to unbounded scenes is that unbounded scenes are large, but mip-NeRF requires a bounded domain. Mip-NeRF handles scenes unbounded in one direction by warping the space into projective space, normalized device coordinates (NDC), but the challenge arises when the scene is unbounded in all directions. A solution is to apply a Kalman-like warp to mip-NeRF Gaussians in order to warp the mip-NeRF into non-Euclidean space. All the Gaussians outside a sphere of radius one will smoothly be warped into a non-euclidean space within a sphere of radius two. This non-Euclidean space is used to represent the input to the MLP. 
+
+
+\textbf{Efficiency:}
+%Problem: Large scenes require more network capacity, but using a large MLP is too expensive (given that you have to query it hundred of times for a single ray)
+%Solution: "Distill" scene geometry from a large NeRF MLP into a small MLP while training. Train a small proposal MLP to bound the geometry predicted by a large NeRF MLP which makes training ~3 times faster
+Extending a bounded scene to an unbounded scene will lead to larger scenes. These scenes require more network capacity, but using a large MLP is too expensive given that you have to query it hundreds of times for a single ray. A solution is to distill scene geometry from a large NeRF MLP into a small \textit{proposal MLP} while training. The proposal MLP will only output a set of weights, no colors. By feeding a set of location points through the proposal MLP, the outputted weights can then be used as a PDF to resample the ray, the same way the coarse network in hierarchical sampling guides the fine network's sampling. The resampled points are then used to render a color, which as normal is supervised with photometric loss. Instead of supervising the proposal MLP to accurately reconstruct the image, which is done for both the coarse and fine MLPs in mip-NeRF, we supervise its output weights to be consistent with the output weights from the NeRF MLP. We do this with a loss function that encourages the outputted weight histograms, which have different bin endpoints, to be consistent with one another. This is possible due to some strong assertions on the relation between the two distributions, summarizing the same underlying, true distribution. This new approach to training accelerates training by 300\%.
+
+%i.e. calculate a loss that correlates the output weights from the NeRF MLP and the proposal MLP. Due to this we can have a very small proposal MLP which we query very frequently, and a larger NeRF MLP which is queried relatively few times.
+%To make this work we need a loss function that encourages histograms with different bin endpoints to be consistent with one another. To achieve this we make some strong assertions on the relation between the two distributions, summarizing the same underlying, true distribution. The loss function will penalize any excess mass that violates the upper bound imposed on the proposal MLP.
+
+
+\textbf{Ambiguity:}
+%Problem: 3D reconstruction becomes more ambigious as you increase the scene size. Results in more artifacts
+%Solution: Utilize a novel regularizer designed specifically for mip-NeRF ray intervals. The regularizer encourages each ray's histogram to be as close to a delta function as possible. 
+Reconstructing 3D content from 2D photos is inherently ambiguous since the content of unbounded scenes can be everywhere and will only be seen by a tiny number of rays. This problem increase as you increase the scene size. The original NeRF-paper partially addressed this behavior by introducing random Gaussian noise to the output $\sigma$ values, before passing them through the ReLU. It stimulated densities to drift toward either zero or infinity, which slightly enhanced visual performance. This regularization isn't sufficient for the more challenging task mip-NeRF 360 seeks to tackle. Instead, they utilize a novel regularizer, designed specifically for mip-NeRF ray intervals, that encourages each ray's histogram to be as close to a delta function as possible. This regularizer reduces the occurences of "floaters", semi-transparent material floating in space.
+
+
+
+\subsection{Block NeRF: Scalable Large Scene Neural View Synthesis}
+Block NeRF is a paper that demonstrates a method for large-scale reconstruction of scenes using NeRFs. It does this by splitting large areas into multiple blocks of a certain radius, where each block has a connected NeRF, dubbed a block-NeRF. The different block-NeRFs are trained on images within their radius of responsibility. At inference time, only the block-NeRFs with a radius that spans the requested location are kept. These are all trained on image data from the requested location and can render an output. Some of the remaining block-NeRFs might still be without a direct line of sight to the requested location, which results in low "visibility". These block-NeRFs are also filtered out, resulting in a pool of block-NeRFs with good visibility. The color outputs of the remaining block-NeRFs are merged to render the final image output.
+
+Block NeRF leverages multiple techniques in order to enable the reconstruction of large scenes.
+
+\subsubsection{Appearance embeddings} \label{sec:appearance-embeddings}
+Per image appearance conditioning is a technique proposed for NeRFs in NeRF-W \cite{martin-brualla_nerf_2021} and later used in multiple implementations. The appearance embeddings help reduce artifacts from the scene, especially "ghosting" artifacts which present themselves as fog in the final render. The appearance embedding is a vector in a low-dimensional space, unique for every input image, that is optimized jointly with the NeRF in order to allow the NeRF to process and represent 3D scenes with variable lighting, exposures, weather, and post-processing effects. In order to accommodate for these variations, we condition the final part of the MLP by passing the viewing direction concatenated with the appearance embedding. 
+%The appearance embedding is concatenated with the viewing direction and passed through an MLP 
+
+\subsection{Learned pose refinement} \label{sec:camera-pose-refinement}
+Camera pose refinement is a technique proposed for NeRFs on forward-facing scenes in \textit{NeRF--} \cite{wang_nerf--_2022}. It has later been built upon to support imperfect camera poses for full 3D scene representations in \textit{BaRF} \cite{lin_barf_2021}. Block-NeRF leverages pose refinement on large unbounded scenes. It is a technique proposed to reduce the impact of imperfect camera poses. In NeRF, this can be done by treating the camera poses and intrinsics as learnable parameters and jointly optimizing them with the 3D scene representation, i.e. optimizing both the photometric loss and the corresponding camera poses. Pose refinement is a very effective measure to reduce cloudy artifacts and increase the sharpness and overall quality of the resulting 3D representation.
+
+An overview of the mip-NeRF 360 pipeline can be seen in \autoref{fig:mip-nerf-360-pipeline-overview}. Note that the pipeline has a number of differences from the previous mip-NeRF pipeline portrayed in \autoref{fig:mip-nerf-pipeline-overview}. There is no redundant RGB-value being rendered and there are two different fields; one density field and one mip-NeRF field.
+
+\input{figures/mip-nerf-360-pipeline-overview.tex}
+
+\subsubsection{Visibility prediction}
+Visibility prediction is done in order to predict if a given point is within the line of sight of a specific block-NeRF. The prediction is done by a secondary MLP $F_v$ that is trained to learn an approximation of the visibility of a sampled point. Given a location and a viewing direction, $F_v$ outputs an approximation of that location's transmittance ($T$ in \autoref{eq:volume-rendering}). The transmittance of a location will be close to 1 if it's visible, i.e. located in free space or on the surface of the first intersected object. Objects inside or behind the first intersected object will have a transmittance close to 0. If the point is seen from multiple viewing directions, the resulting transmittance will be the average of these observations. $F_v$ is supervised by the block-NeRF's main MLP $F_\sigma$.
+
+
+
+% --------------------- Instant-ngp ---------------------
+\subsection{Instant-ngp: Instant Neural Graphics Primitives with a Multiresolution Hash Encoding} \label{sec:instant-ngp}
+Instant-ngp \cite{muller_instant_2022} is a paper that presents a method for speeding up the training- and inference of NeRFs. Previous NeRF methods have required hours or even days of training in order to learn a scene, but the team at Nvidia was able to significantly reduce both the training- and inference time while maintaining the same level of quality. This achievement represented a significant advancement in the field of NeRFs, and has greatly improved the efficiency and effectiveness of NeRF-based applications.
+
+The main technique proposed by instant-NeRF is a new parametric encoding for the scene's spatial data, coined \textit{Multi-resolution hash encoding}. In the original NeRF paper, the location \textbf{x} is represented by a positional encoding as described in \autoref{sec:positionalencoding}. With the multiresolution hash encoding, the location \textbf{x} is represented in a hash table by a linear interpolation of its closest vertices at multiple resolutions. This parametric encoding has several advantages in terms of computational effectiveness, resulting in several magnitudes of increased training and inference speed. Although you impose a larger memory cost by allocating several hash tables, the number of required parameter-updates per backpropagation is severely reduced. An overview of the multiresolution hash encoding can be seen in \autoref{fig:instant-ngp-hash-encoding}.
+
+\input{figures/instant-ngp-hash-encoding.tex}
+
+%The only difference is essentially how spatial data is represented, i.e. parametric encoding. Instant-NGP encodes spatial data at multiple resolutions using hash tables, thereof the name multiresolution hash tables. During backpropagation, the MLP's weights and the feature vectors in the hash tables are both updated.
+%In a fully connected MLP, every weight and bias must be updated on back-propagation. With parametric encodings, only a very small number of feature vectors must be updated. Also, by reducing the size of the MLP, such parametric models can be trained to convergence much faster without sacrificing approximation quality. You trade a larger memory footprint by allocating hash tables, but in return you have to update a far lower number of trainable parameters per back-propagation, leading to an increased training and inference speed.

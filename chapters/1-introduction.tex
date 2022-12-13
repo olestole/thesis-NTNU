@@ -20,6 +20,9 @@ RQ1, RQ2, ...
 The use of Neural Radiance Fields (NeRFs) for novel view synthesis and 3D reconstruction has gained increasing attention in recent years due to its impressive performance. As a result, there has been a surge of research in this area, with many new methods and techniques being proposed and explored. In order to understand the potential of NeRF it is useful to study and evaluate some of the most well-established NeRF-based methods and techniques. By conducting experiments and analyzing the results, we can gain insights into the potential of NeRFs, as well as the challenges and limitations of using these methods.
 
 \section{Goal and research questions}
+%Neural Radiance Fields (NeRFs) is a method proposed for solving the long-standing problem of view synthesis. 
+%It enables novel view synthesis by optimizing a multi-layered perceptron (MLP) to represent a scene, and later queries 
+
 The goal of this report is to investigate the potential of using Neural Radiance Fields (NeRFs) to reconstruct realistic 3D scenes from 2D imagery. Specifically, it aims to determine which methods are most effective for different applications, and how different techniques impact performance. This research will provide insights into the capabilities and limitations of NeRFs for synthesizing 3D scenes, as well as potential directions for future work in this area.
 
 %The goal of this report is to explore how we can leverage NeRFs to reconstruct realistic 3D scenes from 2D imagery, what methods work well for certain applications and how different techniques betters/worsens performance
@@ -38,7 +41,14 @@ What is the potential of using NeRFs in Virtual Reality applications?
 \end{description}
 
 
-\section{Report structure}
+
+In an experiment, a researcher manipulates one or more variables and measures the effect on one or more other variables. Experiments are often used to test hypotheses and to establish cause-and-effect relationships between variables.
+
+\section{Research Method}
+The chosen research method for this report is experiments. The experiments in this report will compare different methods and techniques created to solve the same problem, novel view synthesis. Although some of the methods and techniques discussed are proposed for a constrained task, e.g. bounded scenes, this report evaluates their performance on tasks outside the constrained task space in order to show quantitatively and qualitatively how the constraints affect the result. Observation will be used for the quantitative and qualitative evaluation of the results. The quantitative evaluation will span common image reconstruction quality metrics like PSNR and SSIM, whereas the qualitative assessment primarily will consist of comparing video rendering outputs across methods and techniques.
+
+
+\section{Report Outline}
 
 \begin{description}[leftmargin=!,labelwidth=\widthof{Chapter 1:}]
 \item[\textbf{Chapter 1 - Introduction:}]

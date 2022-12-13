@@ -23,17 +23,18 @@ In this chapter, we will analyze the results of our experiments in relation to t
 How do the different NeRF methods (NeRF, mip-NeRF, instant-ngp, Nerfacto) perform on unbounded, bounded, real, and Blender scenes in terms of reconstruction quality and computational efficiency?
 \end{description}
 
-\subsection{Unbounded scene}
-Both instant-ngp and Nerfacto perform very well on the unbounded scene. 
-
-\subsection{Blender scene (bounded)}
+\subsection{Blender scene (bounded)} \label{sec:blender-scene}
 The "slow" methods, NeRF and mip-NeRF, both produce very good results when trained on the Blender dataset. It is a bounded scene constrained to a single scale. It's not surprising that they score the same across all metrics.
 
 The two "fast" methods, Nerfacto and instant-ngp, are more unequal to each other though. While instant-ngp scores very high on all metrics, Nerfacto needs some adjustment in order to score decent. The Nerfacto model was not designed with blender scenes in mind, and therefore it may not perform well on such scenes. The artifacts in the reconstructed 3D scenes may be due to the scene contraction and sampling strategies used by the model, which are optimized for unbounded scenes. Additionally, the inclusion of appearance conditioning in the model may lead to overfitting, since this feature is intended to handle changes in exposure that do not occur in blender scenes. These factors may contribute to the poor performance of the Nerfacto model on blender scenes.
 
 \subsection{Forward-facing scene}
+It is surprising that the NeRF and mip-NeRF methods doesn't provide better results on the forward facing scene of the T-Rex. Both methods have been shown to perform well on other forward facing scenes, leading to the conclusion that the poor performance on this particular scene may be due to either a difficult scene or poorly tuned hyperparameters. The T-Rex scene may be particularly challenging to learn due to its detailed background and sparse motive with a large amount of empty space. It is possible that the hyperparameters of the NeRF and mip-NeRF methods could have been tuned to better coincide with the scene, e.g. by adjusting the near- and far-scene parameters.
 
+In contrast, both the "fast" methods, instant-npg and Nerfacto, provide good results for the T-Rex scene, although instant-ngp scores significantly higher on both PSNR and SSIM. I believe this is due to the design of the methods. As stated in \autoref{sec:blender-scene}, the Nerfacto is designed for unbounded scenes and include techniques that might worsen results on different scene-types.
 
+\subsection{Unbounded scene}
+Both instant-ngp and Nerfacto perform very well on the unbounded scene. They quickly learn the detailed capture of the old train and are able to render novel views with view-dependent effects. In contrast, both the "slow" methods are unable to learn the unbounded scene. This result is expected, given that these methods are designed for bounded scenes. The resulting renderings from NeRF and mip-NeRF are a blurry mess with some similarity to the original scene in terms of color spectrum, but no evidence of learned geometry.
 
 \section{Dataset size}
 \begin{description}[leftmargin=!,labelwidth=\widthof{RQ 1:}]
