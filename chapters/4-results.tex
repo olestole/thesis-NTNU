@@ -1,10 +1,8 @@
 \chapter{Results}
 
-The following chapter presents the results of our study on the datasets described in \autoref{sec:dataset}. Afterward, the results of multiple experiments that we conducted are presented, including a description of each experiment and the corresponding results. The aim is to showcase some findings and give insight into the process of utilizing NeRFs.
+This chapter presents the results of multiple experiments conducted on the datasets described in \autoref{sec:dataset}. The aim is to showcase some findings and give insight into the process of utilizing NeRFs. The results are both quantitative, measured by the metrics discussed in \autoref{sec:evaluating-nerfs}, and qualitative. The qualitative results are hard to visualize in this report because the only option would be to attach frames from the resulting render. Although this yields an indication of the resulting rendering's quality, a rendered video exposes greater details in terms of correspondences between frames, potential artifacts, and learned geometry. In order to showcase these results, there's a companion page found \href{https://absorbing-peace-5f6.notion.site/NeRF-Renders-1260636ed8e44f8e8e4d45bd9fc6dda4#1edb5c8c9f86444db1902a18243b6e51}{here} where different renders can be browsed and compared.
 
-The results are both quantitative, measured by the metrics discussed in \autoref{sec:evaluating-nerfs}, and qualitative. The qualitative results are hard to visualize in this report because the only option would be to attach frames from the resulting render. Although this yields an indication of the resulting rendering's quality, a rendered video exposes greater details in terms of correspondences between frames, potential artifacts, and learned geometry. In order to showcase these results, there's a companion page found \href{https://absorbing-peace-5f6.notion.site/NeRF-Renders-1260636ed8e44f8e8e4d45bd9fc6dda4#1edb5c8c9f86444db1902a18243b6e51}{here} where different renders can be browsed and compared.
-
-\vspace{5mm} %5mm vertical space
+\vspace{2mm} %5mm vertical space
 \noindent \textbf{\href{https://absorbing-peace-5f6.notion.site/NeRF-Renders-1260636ed8e44f8e8e4d45bd9fc6dda4\#1edb5c8c9f86444db1902a18243b6e51}{Link to companion page with video renders}}
 
 \begin{comment}
@@ -56,14 +54,16 @@ SCENES:
 
 
 \section{Different methods}
-There are multiple different methods proposed for reconstructing 3D scenes and rendering novel views. In this experiment we compare four of the methods that are currently implemented in Nerfstudio. Even though the original NeRF-implementation and mip-NeRF doesn't support unbounded scenes, we conduct an experiment with an unbounded scene to see the results. To make it fair across the methods, we also conduct a separate experiment with a forward-facing scene, and a last experiment on a blender dataset, more appropriately set up for NeRF and mip-NeRF.
-
-Using the different methods on Blender-data yield interesting results. The Nerfacto and instant-ngp models are designed to handle real captures and need some adjustment in order to learn the bounded Blender-scenes. Primarily this adjustment consists of defining the near- and far plane for the rays.
+There are multiple different methods proposed for reconstructing 3D scenes and rendering novel views. In this experiment we compare four of the methods that are currently implemented in Nerfstudio. Even though the original NeRF-implementation and mip-NeRF doesn't support unbounded scenes, we conduct an experiment with an unbounded scene to see the results, \autoref{fig:ohma-electra-result}. To make it fair across the methods, we also conduct a separate experiment with a forward-facing scene, and a last experiment on a Blender dataset, as seen in \autoref{fig:lego-result}, more appropriately set up for NeRF and mip-NeRF.
 
 \input{tables/method-comparison.tex}
 
+Using the different methods on Blender-data, as seen in \autoref{fig:lego-result} yield interesting results. The Nerfacto and instant-ngp models are designed to handle real captures and need some adjustment in order to learn the bounded Blender-scenes. Primarily this adjustment consists of defining the near- and far plane for the rays.
+
+
+
 \section{Dataset size}
-We explore the impact of sampling different number of images from a video. The input video of Ohma Electra, as portrayed in \autoref{fig:ohma-electra}, is 47 seconds long, captured at 30 FPS resulting in 1410 total frames. Leveraging FFMPEG we sample frames at 5 increasingly dense levels. We start with sampling 1 frame every 5 frames, resulting in 20\% of the frames. We decrease the sample spacing iteratively, until we sample 50\% of the frames. Increasing the dataset size increases the amount of time required to retrieve the camera poses, given they're not known a prior. The outcome in quality and time consumption can be seen in \autoref{tab:colmap-dataset-size}.
+We explore the impact of sampling different number of images from a video. Leveraging FFMPEG we sample frames from the Ohma Electra dataset, portrayed in \autoref{fig:ohma-electra}, at 4 increasingly dense levels. We start with sampling 1 frame every 5 frames, resulting in 20\% of the frames. We decrease the sample spacing iteratively until we sample 50\% of the frames. Increasing the dataset size increases the amount of time required to retrieve the camera poses, given they're not known a priori. The outcome in quality and time consumption can be seen in \autoref{tab:colmap-dataset-size}.
 
 \input{tables/colmap-dataset-size.tex}
 
